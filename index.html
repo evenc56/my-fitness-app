@@ -484,8 +484,26 @@ function renderEx(){
 }
 
 // ===== SPEECH =====
-function speak(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-TW';u.rate=.92;window.speechSynthesis.speak(u);}
-function stopSpeech(){if(window.speechSynthesis)window.speechSynthesis.cancel();}
+function speak(text){
+  if(!window.speechSynthesis) return;
+  // Cancel any ongoing speech first
+  window.speechSynthesis.cancel();
+  // Short delay needed on some browsers (especially Chrome) after cancel()
+  setTimeout(()=>{
+    if(!running && text !== EXERCISES[curIdx].speech) return; // Don't speak countdowns if paused
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-TW';
+    u.rate = 0.92;
+    window.speechSynthesis.speak(u);
+  }, 50);
+}
+function stopSpeech(){
+  if(window.speechSynthesis){
+    window.speechSynthesis.cancel();
+    // Small delay to ensure synthesis is fully reset before next use
+    setTimeout(()=>{}, 100);
+  }
+}
 
 // ===== TIMER =====
 const CIRC=239;
@@ -502,7 +520,14 @@ function toggleTimer(){
   } else {
     running=true;
     document.getElementById('btnStart').textContent='⏸ 暫停';
-    if(timeLeft===EXERCISES[curIdx].duration) speak(EXERCISES[curIdx].speech);
+    // 第一次開始才播報完整說明，繼續時不重複
+    if(timeLeft===EXERCISES[curIdx].duration){
+      speak(EXERCISES[curIdx].speech);
+    }
+    // 確保語音引擎在繼續時處於可用狀態
+    if(window.speechSynthesis && window.speechSynthesis.paused){
+      window.speechSynthesis.resume();
+    }
     timerIv=setInterval(tick,1000);
   }
 }
@@ -511,6 +536,10 @@ function tick(){
   timeLeft--;updateRing(timeLeft,totalTime);
   if(timeLeft===10) speak('還有十秒');
   if(timeLeft<=3&&timeLeft>0) speak(String(timeLeft));
+  // Keep speech synthesis alive (some browsers suspend it)
+  if(window.speechSynthesis && !window.speechSynthesis.speaking){
+    window.speechSynthesis.cancel();
+  }
   if(timeLeft<=0){
     clearInterval(timerIv);running=false;
     const ex=EXERCISES[curIdx];
