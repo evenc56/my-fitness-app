@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="每日訓練">
+<meta name="theme-color" content="#1D9E75">
+<title>每日訓練 · 全身功能性訓練</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --teal:#1D9E75;--teal-l:#E1F5EE;--teal-d:#085041;
+  --amber:#BA7517;--amber-l:#FAEEDA;--amber-d:#633806;
+  --blue:#378ADD;--blue-l:#dbeafe;
+  --purple:#7F77DD;--purple-l:#EEEDFE;
+  --red:#E24B4A;
+  --text:#1a1a1a;--textm:#64748b;--textl:#94a3b8;
+  --bg:#f8f7f4;--card:white;--border:#e8e8e8;--r:14px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;}
+.app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+.page{display:none;flex:1;overflow-y:auto;padding:1rem 1rem 5.5rem;}
+.page.active{display:block;}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.nav-btn{flex:1;padding:.6rem 0 .5rem;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--textl);font-size:9px;font-family:inherit;transition:color .2s;}
+.nav-btn.active{color:var(--teal);}
+.nav-icon{font-size:22px;line-height:1;}
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:.75rem;overflow:hidden;}
+.card-body{padding:.9rem 1rem;}
+.section-title{font-size:14px;font-weight:600;margin-bottom:.6rem;}
+.phase-pill{display:inline-flex;align-items:center;background:var(--teal-l);color:var(--teal-d);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.prog-track{height:3px;background:var(--border);border-radius:2px;margin:.5rem 0;}
+.prog-fill{height:100%;background:var(--teal);border-radius:2px;transition:width .5s;}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--textm);}
+.anim-area{height:200px;background:#0f1923;position:relative;}
+.anim-area canvas{display:block;width:100%;height:200px;}
+.anim-caption{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:12px;color:rgba(255,255,255,.85);pointer-events:none;}
+.anim-warn{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:11px;color:#ff6b6b;font-weight:600;pointer-events:none;}
+.rest-ov{display:none;position:absolute;inset:0;background:rgba(15,25,35,.93);align-items:center;justify-content:center;flex-direction:column;gap:4px;z-index:10;}
+.rest-ov.show{display:flex;}
+.rest-txt{font-size:13px;color:rgba(255,255,255,.7);}
+.rest-n{font-size:44px;font-weight:600;color:var(--teal);}
+.muscle-leg{display:flex;gap:6px;flex-wrap:wrap;padding:.5rem 1rem;background:#f8fafc;border-top:1px solid var(--border);}
+.leg-item{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--textm);}
+.leg-dot{width:9px;height:9px;border-radius:50%;}
+.ex-name{font-size:17px;font-weight:600;margin-bottom:2px;}
+.ex-sub{font-size:12px;color:var(--textm);margin-bottom:8px;}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.tag{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:500;}
+.tips-sec{border-top:1px solid var(--border);padding-top:8px;}
+.tip{font-size:12px;color:var(--textm);margin-bottom:4px;display:flex;gap:5px;line-height:1.5;}
+.t-ring{margin:0 auto 8px;position:relative;width:88px;height:88px;}
+.t-ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:#f1f5f9;stroke-width:6;}
+.ring-fill{fill:none;stroke:var(--teal);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+.t-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;}
+.t-lbl{font-size:12px;color:var(--textm);margin-bottom:10px;}
+.set-dots{display:flex;gap:7px;justify-content:center;margin-bottom:12px;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background .3s;}
+.dot.done{background:var(--teal);}.dot.active{background:var(--amber);}
+.btn-row{display:flex;gap:7px;}
+.btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;color:var(--text);font-family:inherit;transition:all .15s;}
+.btn:active{transform:scale(.97);}
+.btn-p{background:var(--teal);color:white;border-color:var(--teal);}
+.btn-p:hover{background:var(--teal-d);}
+.nav-row2{display:flex;gap:7px;margin-top:.6rem;}
+.streak-banner{background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:var(--r);padding:1.2rem;text-align:center;color:white;margin-bottom:.75rem;}
+.streak-big{font-size:52px;font-weight:700;line-height:1;}
+.streak-lbl{font-size:13px;opacity:.9;margin-top:3px;}
+.month-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
+.m-hdr-d{font-size:10px;color:var(--textl);text-align:center;font-weight:600;}
+.month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:.75rem;}
+.m-day{aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--textl);background:#f8fafc;border:1px solid var(--border);}
+.m-day.done{background:var(--teal-l);border-color:var(--teal);color:var(--teal-d);font-weight:700;}
+.m-day.today{border-color:var(--amber);background:var(--amber-l);color:var(--amber-d);}
+.m-day.future{opacity:.3;}
+.m-day.empty{background:transparent;border-color:transparent;}
+.checkin-btn{width:100%;padding:13px;border-radius:12px;border:none;background:var(--teal);color:white;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;}
+.checkin-btn:active{transform:scale(.97);}
+.checkin-btn.done-btn{background:#e2e8f0;color:var(--textm);}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:.75rem;}
+.stat-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:.8rem;text-align:center;}
+.stat-num{font-size:22px;font-weight:700;color:var(--teal);}
+.stat-lbl{font-size:10px;color:var(--textm);margin-top:2px;}
+.history-row{display:flex;align-items:flex-end;gap:4px;height:65px;margin:.5rem 0;}
+.h-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.h-bar{width:100%;background:var(--teal-l);border-radius:3px 3px 0 0;transition:height .5s ease;min-height:3px;}
+.h-bar.filled{background:var(--teal);}
+.h-lbl{font-size:9px;color:var(--textl);}
+.eval-item{margin-bottom:.9rem;}
+.eval-label{font-size:12px;font-weight:500;margin-bottom:.4rem;}
+.eval-scale{display:flex;gap:4px;}
+.eval-btn{flex:1;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:11px;color:var(--textm);font-family:inherit;transition:all .2s;text-align:center;}
+.eval-btn.selected{background:var(--teal-l);border-color:var(--teal);color:var(--teal-d);font-weight:600;}
+.save-indicator{font-size:11px;color:var(--teal);text-align:center;padding:.3rem;opacity:0;transition:opacity .3s;}
+.save-indicator.show{opacity:1;}
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem;}
+.goal-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:.85rem;text-align:center;}
+.goal-icon{font-size:24px;margin-bottom:3px;}
+.goal-label{font-size:10px;color:var(--textm);margin-bottom:3px;}
+.goal-val{font-size:15px;font-weight:700;}
+.goal-sub{font-size:10px;color:var(--textl);margin-top:2px;}
+.tl-item{display:flex;gap:10px;margin-bottom:.9rem;}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:34px;flex-shrink:0;}
+.tl-dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid transparent;flex-shrink:0;}
+.tl-dot.locked{background:#f1f5f9;border-color:#e2e8f0;opacity:.5;}
+.tl-dot.current{background:#fff7ed;border-color:#f59e0b;box-shadow:0 0 0 3px #fef3c7;}
+.tl-dot.done-ms{background:#f0fdf4;border-color:#16a34a;}
+.tl-line{width:2px;background:#e2e8f0;flex:1;margin-top:3px;}
+.tl-item:last-child .tl-line{display:none;}
+.tl-week{font-size:10px;color:var(--textl);font-weight:600;margin-bottom:2px;}
+.tl-title{font-size:13px;font-weight:600;margin-bottom:2px;}
+.tl-desc{font-size:12px;color:var(--textm);line-height:1.5;}
+.prog-item{margin-bottom:.85rem;}
+.prog-item:last-child{margin-bottom:0;}
+.prog-header{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;}
+.prog-bar{height:9px;background:#f1f5f9;border-radius:5px;overflow:hidden;}
+.prog-bar-fill{height:100%;border-radius:5px;transition:width 1.2s ease;}
+.prog-note{font-size:11px;color:var(--textl);margin-top:3px;}
+.dream-card{background:linear-gradient(135deg,var(--teal),var(--teal-d));border-radius:var(--r);padding:1.2rem;margin-bottom:.75rem;color:white;text-align:center;}
+.note-box{background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:.8rem;margin-top:.5rem;}
+.note-text{font-size:12px;color:#713f12;line-height:1.6;}
+.done-sc{display:none;text-align:center;padding:2.5rem 1rem;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- TRAIN PAGE -->
+<div class="page active" id="page-train">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+    <div><div style="font-size:18px;font-weight:600;">每日訓練</div><div style="font-size:12px;color:var(--textm);">全身功能性 · 約 25 分鐘</div></div>
+    <div class="phase-pill" id="phasePill">暖身</div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+  <div class="prog-row"><span id="pLbl">第 1 / 9 個動作</span><span id="pPct">0%</span></div>
+  <div style="margin-top:.7rem;">
+    <div class="card" id="mainCard">
+      <div class="anim-area" id="animArea">
+        <canvas id="animCanvas"></canvas>
+        <div class="anim-warn" id="animWarn"></div>
+        <div class="anim-caption" id="animCaption"></div>
+        <div class="rest-ov" id="restOv"><div class="rest-txt">組間休息</div><div class="rest-n" id="restN">10</div></div>
+      </div>
+      <div class="muscle-leg" id="muscleLeg"></div>
+      <div class="card-body">
+        <div class="ex-name" id="exName"></div>
+        <div class="ex-sub" id="exSub"></div>
+        <div class="tags" id="exTags"></div>
+        <div class="tips-sec" id="exTips"></div>
+      </div>
+      <div class="card-body" style="border-top:1px solid var(--border);text-align:center;">
+        <div class="t-ring">
+          <svg viewBox="0 0 88 88" width="88" height="88">
+            <circle class="ring-bg" cx="44" cy="44" r="38"/>
+            <circle class="ring-fill" id="ringFill" cx="44" cy="44" r="38" stroke-dasharray="239" stroke-dashoffset="0"/>
+          </svg>
+          <div class="t-num" id="tNum">—</div>
+        </div>
+        <div class="t-lbl" id="tLbl">準備開始</div>
+        <div class="set-dots" id="setDots"></div>
+        <div class="btn-row">
+          <button class="btn" onclick="prevEx()">← 上個</button>
+          <button class="btn btn-p" id="btnStart" onclick="toggleTimer()">▶ 開始</button>
+          <button class="btn" onclick="nextEx()">下個 →</button>
+        </div>
+      </div>
+    </div>
+    <div class="done-sc" id="doneSc">
+      <div style="font-size:52px;">🎯</div>
+      <div style="font-size:20px;font-weight:600;margin:.6rem 0 .3rem;">今日訓練完成！</div>
+      <div style="font-size:13px;color:var(--textm);">全身都動到了，肩膀與膝蓋都照顧到。<br>記得去打卡記錄今天的成果！</div>
+      <br>
+      <button class="btn btn-p" style="width:100%;margin-top:10px;" onclick="restart()">再練一次</button>
+      <button class="btn" style="width:100%;margin-top:8px;" onclick="goPage('checkin')">去打卡 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKIN PAGE -->
+<div class="page" id="page-checkin">
+  <div style="font-size:18px;font-weight:600;margin-bottom:.1rem;">訓練紀錄</div>
+  <div style="font-size:12px;color:var(--textm);margin-bottom:.8rem;" id="todayDate"></div>
+  <div class="streak-banner">
+    <div class="streak-big" id="streakNum">0</div>
+    <div class="streak-lbl">🔥 連續訓練天數</div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-lbl">總訓練天</div></div>
+    <div class="stat-card"><div class="stat-num" id="statMonth">0</div><div class="stat-lbl">本月次數</div></div>
+    <div class="stat-card"><div class="stat-num" id="statBest">0</div><div class="stat-lbl">最長連續</div></div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title" id="monthTitle">本月打卡</div>
+      <div class="month-hdr"><div class="m-hdr-d">一</div><div class="m-hdr-d">二</div><div class="m-hdr-d">三</div><div class="m-hdr-d">四</div><div class="m-hdr-d">五</div><div class="m-hdr-d">六</div><div class="m-hdr-d">日</div></div>
+      <div class="month-grid" id="monthGrid"></div>
+      <button class="checkin-btn" id="checkinBtn" onclick="checkInToday()">✅ 今日打卡</button>
+      <div class="save-indicator" id="saveIndicator">已儲存 ✓</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">📈 近 7 天訓練</div>
+      <div class="history-row" id="historyRow"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">📝 今日自我評估</div>
+      <div class="eval-item">
+        <div class="eval-label">下樓梯膝蓋不適程度</div>
+        <div class="eval-scale">
+          <button class="eval-btn" onclick="selectEval(this,'knee',1)">很痛</button>
+          <button class="eval-btn" onclick="selectEval(this,'knee',2)">有點</button>
+          <button class="eval-btn" onclick="selectEval(this,'knee',3)">輕微</button>
+          <button class="eval-btn" onclick="selectEval(this,'knee',4)">沒有</button>
+        </div>
+      </div>
+      <div class="eval-item">
+        <div class="eval-label">右肩活動範圍感覺</div>
+        <div class="eval-scale">
+          <button class="eval-btn" onclick="selectEval(this,'shoulder',1)">很緊</button>
+          <button class="eval-btn" onclick="selectEval(this,'shoulder',2)">還緊</button>
+          <button class="eval-btn" onclick="selectEval(this,'shoulder',3)">鬆多了</button>
+          <button class="eval-btn" onclick="selectEval(this,'shoulder',4)">很好</button>
+        </div>
+      </div>
+      <div class="eval-item">
+        <div class="eval-label">今天訓練感覺</div>
+        <div class="eval-scale">
+          <button class="eval-btn" onclick="selectEval(this,'feel',1)">很累</button>
+          <button class="eval-btn" onclick="selectEval(this,'feel',2)">還好</button>
+          <button class="eval-btn" onclick="selectEval(this,'feel',3)">輕鬆</button>
+          <button class="eval-btn" onclick="selectEval(this,'feel',4)">很好</button>
+        </div>
+      </div>
+      <button class="btn btn-p" style="width:100%;margin-top:.5rem;" onclick="saveEval()">儲存評估</button>
+      <div class="note-box" style="margin-top:.75rem;">
+        <div class="note-text">💡 建議每兩週評估一次，追蹤膝蓋和肩膀的實際改善狀況。右肩復健同時建議配合物理治療師。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MILESTONE PAGE -->
+<div class="page" id="page-milestone">
+  <div style="font-size:18px;font-weight:600;margin-bottom:.1rem;">我的目標</div>
+  <div style="font-size:12px;color:var(--textm);margin-bottom:.8rem;">根據你的狀況個人化預測</div>
+  <div class="goal-grid">
+    <div class="goal-card"><div class="goal-icon">🏸</div><div class="goal-label">終極目標</div><div class="goal-val" style="color:var(--teal);">回歸羽球</div><div class="goal-sub">9–12 個月</div></div>
+    <div class="goal-card"><div class="goal-icon">🦵</div><div class="goal-label">膝蓋改善</div><div class="goal-val" style="color:var(--blue);">3–4 個月</div><div class="goal-sub">下樓不適消失</div></div>
+    <div class="goal-card"><div class="goal-icon">💪</div><div class="goal-label">肌力有感</div><div class="goal-val" style="color:var(--amber);">6–8 週</div><div class="goal-sub">動作明顯輕鬆</div></div>
+    <div class="goal-card"><div class="goal-icon">🫙</div><div class="goal-label">肩膀活動度</div><div class="goal-val" style="color:var(--purple);">2–3 個月</div><div class="goal-sub">可做輕度運動</div></div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">🗓 里程碑時間表</div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-dot current" id="ms0">🌱</div><div class="tl-line"></div></div><div><div class="tl-week">第 1–2 週</div><div class="tl-title">神經適應期</div><div class="tl-desc">大腦學習正確動作模式，重點是每天出現。</div></div></div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-dot locked" id="ms1">⚡</div><div class="tl-line"></div></div><div><div class="tl-week">第 3–4 週</div><div class="tl-title">第一個有感變化</div><div class="tl-desc">動作開始「輕了」，膝蓋起身不適開始減輕。</div></div></div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-dot locked" id="ms2">🔥</div><div class="tl-line"></div></div><div><div class="tl-week">第 6–8 週</div><div class="tl-title">肌力明顯提升</div><div class="tl-desc">下樓梯不適大幅改善，體態開始變化。</div></div></div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-dot locked" id="ms3">🦵</div><div class="tl-line"></div></div><div><div class="tl-week">第 3 個月</div><div class="tl-title">膝蓋基本正常</div><div class="tl-desc">下樓和起身不適消失或極輕微。</div></div></div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-dot locked" id="ms4">🙌</div><div class="tl-line"></div></div><div><div class="tl-week">第 4–5 個月</div><div class="tl-title">右肩可做輕度運動</div><div class="tl-desc">五十肩活動度恢復，可開始輕度揮拍練習。</div></div></div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-dot locked" id="ms5">🏸</div><div class="tl-line"></div></div><div><div class="tl-week">第 9–12 個月</div><div class="tl-title">🎯 回歸羽球場！</div><div class="tl-desc">全身肌群平衡建立，重返球場！</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">📊 預測進度</div>
+      <div class="prog-item"><div class="prog-header"><span>🦵 膝蓋穩定度</span><span id="prog-knee-pct" style="color:var(--textm);">15%</span></div><div class="prog-bar"><div class="prog-bar-fill" id="prog-knee" style="width:15%;background:var(--blue);"></div></div><div class="prog-note">目標：3 個月達 80%</div></div>
+      <div class="prog-item"><div class="prog-header"><span>🫙 右肩活動度</span><span id="prog-shoulder-pct" style="color:var(--textm);">25%</span></div><div class="prog-bar"><div class="prog-bar-fill" id="prog-shoulder" style="width:25%;background:var(--purple);"></div></div><div class="prog-note">目標：5 個月達 70%</div></div>
+      <div class="prog-item"><div class="prog-header"><span>💪 全身肌力基礎</span><span id="prog-strength-pct" style="color:var(--textm);">5%</span></div><div class="prog-bar"><div class="prog-bar-fill" id="prog-strength" style="width:5%;background:var(--teal);"></div></div><div class="prog-note">目標：8 週達 40%</div></div>
+      <div class="prog-item"><div class="prog-header"><span>🏸 羽球就緒度</span><span id="prog-badminton-pct" style="color:var(--textm);">10%</span></div><div class="prog-bar"><div class="prog-bar-fill" id="prog-badminton" style="width:10%;background:var(--amber);"></div></div><div class="prog-note">目標：9–12 個月達 85%+</div></div>
+    </div>
+  </div>
+  <div class="dream-card">
+    <div style="font-size:36px;margin-bottom:.5rem;">🏸</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;">終極目標：回歸羽球場</div>
+    <div style="font-size:12px;opacity:.85;line-height:1.6;margin-bottom:.7rem;">每天練習，9 個月後<br>你的肩膀和膝蓋都準備好了</div>
+    <div style="background:rgba(255,255,255,.2);border-radius:8px;padding:.5rem .8rem;font-size:13px;font-weight:600;" id="dreamEta">預計時間：計算中...</div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn active" id="nav-train" onclick="goPage('train')"><span class="nav-icon">🏋️</span>訓練</button>
+  <button class="nav-btn" id="nav-milestone" onclick="goPage('milestone')"><span class="nav-icon">🎯</span>目標</button>
+  <button class="nav-btn" id="nav-checkin" onclick="goPage('checkin')"><span class="nav-icon">📅</span>打卡</button>
+</div>
+</div>
+
+<script>
+// ===== STORAGE (localStorage for web) =====
+const STORAGE_KEY='fitness-app-data-v1';
+function loadData(){try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):defaultData();}catch(e){return defaultData();}}
+function saveData(d){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(d));showSaveIndicator();}catch(e){}}
+function defaultData(){return{checkedDates:[],evalHistory:[],startDate:todayStr(),bestStreak:0};}
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function showSaveIndicator(){const el=document.getElementById('saveIndicator');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2000);}
+
+let appData=loadData();
+let evalState={};
+
+// ===== INIT =====
+function init(){renderCheckin();renderMilestone();updateTodayDate();renderEx();}
+function updateTodayDate(){const d=new Date();const days=['日','一','二','三','四','五','六'];document.getElementById('todayDate').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${days[d.getDay()]}`;}
+
+// ===== NAVIGATION =====
+function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.getElementById('nav-'+id).classList.add('active');if(id==='checkin')renderCheckin();if(id==='milestone')renderMilestone();}
+
+// ===== CHECKIN =====
+function calcStreak(dates){if(!dates.length)return 0;let s=0,cur=new Date();cur.setHours(0,0,0,0);for(let i=0;i<90;i++){const ds=`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}-${String(cur.getDate()).padStart(2,'0')}`;if(dates.includes(ds)){s++;cur.setDate(cur.getDate()-1);}else if(i===0){cur.setDate(cur.getDate()-1);}else break;}return s;}
+function renderCheckin(){
+  const today=todayStr();const checked=appData.checkedDates||[];
+  const streak=calcStreak(checked);const best=Math.max(streak,appData.bestStreak||0);
+  document.getElementById('streakNum').textContent=streak;
+  document.getElementById('statTotal').textContent=checked.length;
+  document.getElementById('statBest').textContent=best;
+  const now=new Date();const mp=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById('statMonth').textContent=checked.filter(d=>d.startsWith(mp)).length;
+  document.getElementById('monthTitle').textContent=`${now.getFullYear()}年${now.getMonth()+1}月 打卡`;
+  const grid=document.getElementById('monthGrid');grid.innerHTML='';
+  const first=new Date(now.getFullYear(),now.getMonth(),1);
+  let dow=first.getDay();dow=dow===0?6:dow-1;
+  const dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  for(let i=0;i<dow;i++){const el=document.createElement('div');el.className='m-day empty';grid.appendChild(el);}
+  for(let d=1;d<=dim;d++){const ds=`${now.getFullYear()}-${mp.split('-')[1]}-${String(d).padStart(2,'0')}`;const el=document.createElement('div');const isToday=ds===today;const isDone=checked.includes(ds);const isFuture=d>now.getDate();el.className='m-day'+(isDone?' done':isToday?' today':isFuture?' future':'');el.textContent=d;grid.appendChild(el);}
+  const btn=document.getElementById('checkinBtn');if(checked.includes(today)){btn.textContent='✅ 今天已打卡！';btn.classList.add('done-btn');}else{btn.textContent='✅ 今日打卡';btn.classList.remove('done-btn');}
+  renderHistory(checked);updateMilestoneFromDays(checked.length);
+}
+function renderHistory(checked){const row=document.getElementById('historyRow');row.innerHTML='';const days=['一','二','三','四','五','六','日'];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;const done=checked.includes(ds);const dow=d.getDay();const label=days[dow===0?6:dow-1];const wrap=document.createElement('div');wrap.className='h-bar-wrap';const bar=document.createElement('div');bar.className='h-bar'+(done?' filled':'');bar.style.height=done?'55px':'5px';const lbl=document.createElement('div');lbl.className='h-lbl';lbl.textContent=label;wrap.append(bar,lbl);row.appendChild(wrap);}}
+function checkInToday(){const today=todayStr();if(appData.checkedDates.includes(today))return;appData.checkedDates.push(today);const streak=calcStreak(appData.checkedDates);appData.bestStreak=Math.max(streak,appData.bestStreak||0);saveData(appData);renderCheckin();updateMilestoneProgress();}
+
+// ===== EVAL =====
+function selectEval(btn,key,val){evalState[key]=val;btn.parentElement.querySelectorAll('.eval-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
+function saveEval(){const today=todayStr();const entry={date:today,...evalState};appData.evalHistory=(appData.evalHistory||[]).filter(e=>e.date!==today);appData.evalHistory.push(entry);saveData(appData);alert('評估已儲存！');}
+
+// ===== MILESTONE =====
+function updateMilestoneFromDays(n){const ms=[{id:'ms0',days:0},{id:'ms1',days:14},{id:'ms2',days:42},{id:'ms3',days:90},{id:'ms4',days:120},{id:'ms5',days:270}];ms.forEach((m,i)=>{const el=document.getElementById(m.id);if(!el)return;if(n>=(ms[i+1]?.days??999)){el.className='tl-dot done-ms';}else if(n>=m.days){el.className='tl-dot current';}else{el.className='tl-dot locked';}});}
+function updateMilestoneProgress(){const n=(appData.checkedDates||[]).length;const set=(id,pct)=>{const el=document.getElementById(id);const pel=document.getElementById(id+'-pct');if(el)el.style.width=pct+'%';if(pel)pel.textContent=pct+'%';};set('prog-knee',Math.min(80,Math.round(15+(n/90)*65)));set('prog-shoulder',Math.min(70,Math.round(25+(n/150)*45)));set('prog-strength',Math.min(75,Math.round(5+(n/180)*70)));set('prog-badminton',Math.min(85,Math.round(10+(n/300)*75)));}
+function renderMilestone(){const n=(appData.checkedDates||[]).length;updateMilestoneFromDays(n);updateMilestoneProgress();const start=appData.startDate?new Date(appData.startDate):new Date();const eta=new Date(start);eta.setMonth(eta.getMonth()+10);const months=['一','二','三','四','五','六','七','八','九','十','十一','十二'];document.getElementById('dreamEta').textContent=`預計時間：${eta.getFullYear()}年${months[eta.getMonth()]}月 🎯`;}
+
+// ===== ANIMATION =====
+const canvas=document.getElementById('animCanvas');
+const ctx=canvas.getContext('2d');
+function resizeCanvas(){const area=document.getElementById('animArea');canvas.width=area.clientWidth||380;canvas.height=200;}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+
+const CIRC=239;
+const SK='#f0c89a',SK2='#d4956a',BONE='#cbd5e1',BONE2='#94a3b8';
+const MUSCLES={glute:{color:'#16a34a',label:'臀大肌'},quad:{color:'#ca8a04',label:'股四頭肌'},core:{color:'#2563eb',label:'腹橫肌'},ham:{color:'#d97706',label:'股二頭肌'},gluteMed:{color:'#7c3aed',label:'臀中肌'},rhomboid:{color:'#16a34a',label:'菱形肌'},trapLow:{color:'#ca8a04',label:'中下斜方肌'},iliopsoas:{color:'#dc2626',label:'髂腰肌'},rectFem:{color:'#d97706',label:'股直肌'},rotCuff:{color:'#7c3aed',label:'旋轉肌袖'},capsule:{color:'#2563eb',label:'關節囊'},multifidus:{color:'#16a34a',label:'多裂肌'},calf:{color:'#2563eb',label:'小腿肌'},spineExt:{color:'#16a34a',label:'脊椎延伸肌'},transAbs:{color:'#2563eb',label:'腹橫肌'}};
+function seg(x1,y1,x2,y2,w,col){ctx.save();ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();}
+function jnt(x,y,r,col){ctx.save();ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.restore();}
+function hd(x,y,r=14){ctx.save();ctx.fillStyle=SK;ctx.strokeStyle=SK2;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#8B6331';ctx.beginPath();ctx.ellipse(x,y-r*.4,r*.7,r*.5,0,Math.PI,Math.PI*2);ctx.fill();ctx.restore();}
+function glow(x,y,rx,ry,col,a=.55){ctx.save();ctx.globalAlpha=a*.35;ctx.fillStyle=col;ctx.beginPath();ctx.ellipse(x,y,rx+5,ry+5,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=a;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill();ctx.restore();}
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+function flr(y){ctx.save();ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(20,y);ctx.lineTo(canvas.width-20,y);ctx.stroke();ctx.restore();}
+function bg(){ctx.fillStyle='#0f1923';ctx.fillRect(0,0,canvas.width,canvas.height);}
+function cx(){return canvas.width/2;}
+
+const EXERCISES=[
+{name:'貓牛式脊椎活動',sub:'暖身・伸展 · 各 10 次',phase:'暖身',sets:1,duration:40,muscles:['spineExt','transAbs'],warns:[],tips:[{i:'✅',t:'吸氣脊椎下沉（牛式），吐氣拱背（貓式）'},{i:'✅',t:'感受每節脊椎依序活動'},{i:'❌',t:'避免腰部塌陷或聳肩'},{i:'⚠️',t:'右手輕鬆撐地，不需用力'}],speech:'貓牛式。四足跪姿，吸氣脊椎下沉，吐氣圓背收腹。感受脊椎延伸肌交替啟動，肩膀放鬆不聳肩。',draw:(t)=>{bg();const c=cx();const ph=Math.sin(t*1.5);const sy=95+ph*11;glow(c,sy,58,13,'#16a34a',.5);glow(c,sy+5,42,10,'#2563eb',.4);ctx.save();ctx.strokeStyle=BONE;ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(c-75,sy+16);ctx.bezierCurveTo(c-35,sy,c+35,sy,c+75,sy+16);ctx.stroke();ctx.restore();seg(c-75,sy+16,c-85,sy-14,7,BONE2);seg(c-85,sy-14,c-82,sy+18,7,BONE2);seg(c+75,sy+16,c+85,sy-14,7,BONE2);seg(c+85,sy-14,c+82,sy+18,7,BONE2);seg(c-35,sy+9,c-42,sy-20,6,BONE);seg(c-42,sy-20,c-38,sy+13,6,BONE);hd(c+83,sy-30,14);document.getElementById('animCaption').textContent=ph>0?'牛式：吸氣，脊椎下沉延展':'貓式：吐氣，拱背收腹';}},
+{name:'髖屈肌伸展',sub:'暖身・伸展 · 每側 30 秒',phase:'暖身',sets:2,duration:30,muscles:['iliopsoas','rectFem'],warns:[],tips:[{i:'✅',t:'弓箭步，後腳膝蓋落地，身體直立'},{i:'✅',t:'感受後腳大腿前側和腹股溝伸展'},{i:'❌',t:'身體不要前傾，骨盆保持水平'},{i:'⚠️',t:'膝蓋下方可墊毛巾'}],speech:'髖屈肌伸展。弓箭步後腳膝蓋落地，身體直立，感受大腿前側髂腰肌與股直肌拉開。骨盆保持水平不前傾。',draw:(t)=>{bg();const c=cx();const d=ease(Math.min(1,(Math.sin(t*1.2)+1)/2));const fy=170;flr(fy);const hx=c+5,hy=fy-32-d*44;glow(hx-6,hy+50,19,25,'#dc2626',.6+d*.15);glow(hx+26,hy+45,16,20,'#d97706',.55+d*.15);seg(hx,hy+30,hx+30,fy-14,8,BONE);seg(hx+30,fy-14,hx+32,fy,8,BONE);jnt(hx+30,fy-14,6,BONE);seg(hx,hy+30,hx-30,fy-14-d*9,7,BONE2);seg(hx-30,fy-14-d*9,hx-25,fy,7,BONE2);jnt(hx-30,fy-14-d*9,5,BONE2);seg(hx,hy,hx,hy+30,8,BONE2);seg(hx,hy+15,hx-18,hy+28,5,BONE2);seg(hx,hy+15,hx+16,hy+28,5,BONE2);jnt(hx,hy+30,7,BONE2);hd(hx,hy-14,14);document.getElementById('animCaption').textContent='弓箭步，感受大腿前側（紅橙色）伸展';}},
+{name:'肩關節鐘擺運動',sub:'右肩復健 · 各方向 20 圈',phase:'肩部復健',sets:2,duration:40,muscles:['capsule','rotCuff'],warns:['不要主動出力！靠重力自然搖擺'],tips:[{i:'✅',t:'身體前傾，右臂自然下垂，靠重力輕輕畫圓'},{i:'✅',t:'先畫小圓，慢慢擴大，感受肩關節鬆開'},{i:'❌',t:'不要主動用肌肉甩動手臂'},{i:'⚠️',t:'五十肩復健黃金動作，每天都要做'}],speech:'右肩鐘擺運動。身體前傾，右臂完全放鬆下垂，不要主動出力，讓重力帶動手臂畫圓。放鬆關節囊與旋轉肌袖，改善五十肩。',draw:(t)=>{bg();const c=cx();const ang=Math.sin(t*1.3)*.44;const sx=c+10,sy=85,al=65;const hx=sx+Math.sin(ang)*al,hy=sy+Math.cos(ang)*al;ctx.save();ctx.fillStyle='rgba(255,255,255,.07)';ctx.fillRect(c-50,sy-5,90,7);ctx.restore();seg(c-30,sy,c-35,145,7,BONE2);seg(c-15,sy-5,c-32,sy+3,5,BONE2);hd(c-22,sy-17,13);glow(sx,sy-2,21,21,'#2563eb',.6);glow(sx,sy+7,15,15,'#7c3aed',.5);[.3,.2,.1].forEach((f,i)=>{const a2=Math.sin((t-f)*1.3)*.44;const tx2=sx+Math.sin(a2)*al,ty2=sy+Math.cos(a2)*al;ctx.save();ctx.strokeStyle=`rgba(29,158,117,${.12-i*.03})`;ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(tx2,ty2);ctx.stroke();ctx.restore();});seg(sx,sy,hx,hy,7,'#2563eb');jnt(hx,hy,8,'#2563eb');jnt(sx,sy,9,BONE2);document.getElementById('animCaption').textContent='右臂完全放鬆，靠重力自然畫圓';document.getElementById('animWarn').textContent='不要主動出力！';}},
+{name:'臀橋',sub:'肌力・核心 · 3 組 × 12 下',phase:'核心與下肢',sets:3,duration:35,muscles:['glute','ham','core'],warns:['膝蓋不能向內塌！'],tips:[{i:'✅',t:'從臀部發力往上推，頂端夾緊 2 秒'},{i:'✅',t:'感受臀肌收縮，不是腰部用力'},{i:'❌',t:'避免腰部代償，下背不要過度伸展'},{i:'❌',t:'膝蓋對齊腳趾，不能向內塌'}],speech:'臀橋。仰臥屈膝，從臀大肌發力將髖部推高，頂端夾緊臀肌維持兩秒。感受是臀部收縮，不是腰部出力。膝蓋對齊腳趾，不能向內塌。',draw:(t)=>{bg();const c=cx();const raw=(t%3.5)/3.5;const p=raw<.45?ease(raw/.45):raw<.6?1:ease(1-(raw-.6)/.4);const fy=172;flr(fy);const hx=c+15,hy=fy-22-p*48;seg(c-80,fy-15,hx,hy,9,BONE2);if(p>.3){glow(hx,hy,21,15,'#16a34a',.6+p*.15);glow(hx+28,hy+10,16,11,'#d97706',.55);glow(hx-18,hy-6,14,9,'#2563eb',.45);}seg(hx,hy,hx+42,fy-17,9,BONE);seg(hx+42,fy-17,hx+38,fy,9,BONE);seg(hx,hy,hx+58,fy-15,8,BONE2);seg(hx+58,fy-15,hx+56,fy,8,BONE2);seg(c-80,fy-15,c-93,fy-36,5,BONE2);seg(c-80,fy-15,c-67,fy-36,5,BONE2);jnt(hx,hy,7,BONE2);jnt(hx+42,fy-17,6,BONE);hd(c-93,fy-26,13);document.getElementById('animCaption').textContent=p>.6?'頂端：夾緊臀肌 2 秒！':p>.1?'臀部向上推，從臀部發力':'準備：仰臥屈膝踩地';document.getElementById('animWarn').textContent=p>.2?'膝蓋對齊腳趾，不能向內塌！':'';}},
+{name:'側躺蚌殼式',sub:'膝蓋保護 · 每側 15 下',phase:'核心與下肢',sets:2,duration:35,muscles:['gluteMed'],warns:['骨盆不能旋轉！'],tips:[{i:'✅',t:'側躺雙膝彎曲 45°，腳跟併攏，上方膝蓋向上打開'},{i:'✅',t:'感受臀部外側收縮，像蚌殼打開'},{i:'❌',t:'骨盆不能旋轉，保持穩定'},{i:'⚠️',t:'臀中肌弱是膝蓋疼痛主因，這動作很關鍵'}],speech:'側躺蚌殼式。側臥雙膝彎曲，腳跟併攏，上方膝蓋向上打開。感受臀部外側臀中肌收縮。骨盆不能旋轉，強化膝蓋穩定性。',draw:(t)=>{bg();const c=cx();const p=ease((Math.sin(t*1.5)+1)/2);const bx=c-110,by=105;ctx.save();ctx.strokeStyle=BONE2;ctx.lineWidth=10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+155,by);ctx.stroke();ctx.restore();hd(bx-14,by,13);const bkx=bx+155+32,bky=by+20;seg(bx+155,by,bkx,bky,8,BONE2);seg(bkx,bky,bkx+8,by+42,8,BONE2);jnt(bkx,bky,5,BONE2);const ang=-0.2-p*.65;const tkx=bx+155+Math.cos(ang)*63,tky=by+Math.sin(ang)*63;if(p>.3)glow(bx+152,by-8,19,13,'#7c3aed',.6+p*.15);seg(bx+155,by,tkx,tky,8,'#7c3aed');seg(tkx,tky,bkx+8,by+42,8,'#7c3aed');jnt(tkx,tky,5,'#7c3aed');seg(bx+18,by,bx+5,by-28,5,BONE2);document.getElementById('animCaption').textContent=p>.5?'臀中肌發力（紫色），骨盆不動！':'側躺，腳跟併攏，準備打開';document.getElementById('animWarn').textContent=p>.5?'骨盆不能旋轉！':'';}},
+{name:'死蟲式',sub:'核心穩定 · 3 組 × 8 下',phase:'核心與下肢',sets:3,duration:40,muscles:['core','multifidus'],warns:['腰椎離地立刻停！'],tips:[{i:'✅',t:'仰臥手臂朝上雙腿桌式，右臂左腿同時伸展'},{i:'✅',t:'腰椎全程貼地，這是唯一指標'},{i:'❌',t:'下背一旦離地立刻縮小幅度'},{i:'⚠️',t:'右臂伸展幅度可比左臂小，不需對稱'}],speech:'死蟲式。仰臥右臂左腿同時緩慢伸展。腰椎必須全程貼地。下背一旦離地立刻縮小幅度。',draw:(t)=>{bg();const c=cx();const p=ease((Math.sin(t*1.3)+1)/2);const fy=155;flr(fy);hd(c-110,fy-20,13);ctx.save();ctx.strokeStyle=BONE2;ctx.lineWidth=10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(c-95,fy-10);ctx.lineTo(c+80,fy-10);ctx.stroke();ctx.restore();glow(c-5,fy-16,50,12,'#2563eb',.55);glow(c-25,fy-14,34,9,'#16a34a',.45);const rex=p>0?c-75-p*28:c-75,rey=p>0?fy-10+p*12:fy-46;seg(c-75,fy-10,rex,rey,6,'#2563eb');jnt(rex,rey,4,'#2563eb');seg(c-75,fy-10,c-50,fy-48,6,BONE);jnt(c-50,fy-48,4,BONE);const lex=c+45+p*48,ley=fy-10+p*8;seg(c+45,fy-10,lex,ley,8,'#2563eb');jnt(lex,ley,5,'#2563eb');seg(c+25,fy-10,c+15,fy-42,8,BONE2);seg(c+15,fy-42,c+12,fy-10,8,BONE2);document.getElementById('animCaption').textContent=p>.5?'右臂左腿伸展，腰椎全程貼地！':'起始：手臂朝上，雙腿桌式';document.getElementById('animWarn').textContent=p>.5?'腰椎離地立刻停！':'';}},
+{name:'肩胛骨夾擠',sub:'上背・肩部復健 · 3 組 × 15 下',phase:'上背與肩部',sets:3,duration:30,muscles:['rhomboid','trapLow'],warns:['肩膀不能聳肩！'],tips:[{i:'✅',t:'雙肩胛向脊椎中線收緊，維持 3 秒'},{i:'✅',t:'感受兩肩胛間深層肌肉收縮，肩膀下沉'},{i:'❌',t:'不要聳肩代償，肩膀保持下沉'},{i:'⚠️',t:'強化後拉肌群，幫助肩關節恢復正常軌跡'}],speech:'肩胛骨夾擠。雙肩胛骨向脊椎中線收緊，感受菱形肌與中下斜方肌收縮，維持三秒。肩膀下沉不要聳肩。',draw:(t)=>{bg();const c=cx();const p=ease((Math.sin(t*1.5)+1)/2);const ty=32;const sp=p*16;hd(c,ty+12,14);seg(c,ty+26,c,ty+76,8,BONE2);const lsx=c-26-sp,rsx=c+26+sp,sy=ty+42;ctx.save();ctx.strokeStyle=p>.3?'#16a34a':BONE2;ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(lsx,sy);ctx.lineTo(rsx,sy);ctx.stroke();ctx.restore();if(p>.3){glow(c-13,sy+4,14+sp*.4,10,'#16a34a',.65);glow(c+13,sy+4,14+sp*.4,10,'#16a34a',.65);glow(c-8,sy+15,10,7,'#ca8a04',.55);glow(c+8,sy+15,10,7,'#ca8a04',.55);}seg(lsx,sy,lsx-6,sy+32,6,BONE2);seg(rsx,sy,rsx+6,sy+32,6,BONE2);seg(c,ty+76,c-13,ty+120,8,BONE2);seg(c,ty+76,c+13,ty+120,8,BONE2);[lsx,c,rsx].forEach((x,i)=>jnt(x,i===1?ty+76:sy,5,BONE2));document.getElementById('animCaption').textContent=p>.5?'夾緊！感受肩胛間肌肉收縮（綠色）':'放鬆：正常肩胛位置';document.getElementById('animWarn').textContent=p>.5?'肩膀保持下沉，不能聳肩！':'';}},
+{name:'靠牆深蹲',sub:'肌力・膝蓋訓練 · 3 組 × 12 下',phase:'核心與下肢',sets:3,duration:35,muscles:['quad','glute','calf'],warns:['膝蓋絕不能向內塌！'],tips:[{i:'✅',t:'背靠牆緩慢下蹲，大腿平行地面'},{i:'✅',t:'膝蓋方向對齊第二腳趾'},{i:'❌',t:'膝蓋向內塌是最大錯誤，會傷膝蓋'},{i:'❌',t:'若膝蓋不適，縮小角度，不強求平行'}],speech:'靠牆深蹲。背靠牆緩慢下蹲，感受股四頭肌和臀肌出力。膝蓋對齊腳趾，絕對不能向內塌陷。有不適就縮小角度。',draw:(t)=>{bg();const c=cx();const raw=(t%3)/3;const p=raw<.45?ease(raw/.45):raw<.6?1:ease(1-(raw-.6)/.4);const fy=180;flr(fy);ctx.save();ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect(canvas.width-25,20,14,165);ctx.restore();const hx=canvas.width-38,hy=55+p*.38*44;hd(canvas.width-32,hy-19,14);seg(canvas.width-30,hy-7,hx,hy+40,9,BONE2);const lkx=hx-38,lky=hy+40+p*34;const rkx=hx-20,rky=hy+38+p*34;if(p>.3){glow(lkx,lky-12,18,25,'#ca8a04',.7);glow(hx-5,hy+36,16,12,'#16a34a',.6);glow(lkx+4,fy-12,9,12,'#2563eb',.55);}seg(hx,hy+40,lkx,lky,10,'#ca8a04');seg(lkx,lky,lkx+3,fy,10,'#ca8a04');seg(hx,hy+40,rkx,rky,9,BONE2);seg(rkx,rky,rkx+7,fy,9,BONE2);seg(hx,hy+14,hx-28,hy+30,6,BONE2);seg(hx,hy+14,hx+8,hy+30,6,BONE2);jnt(lkx,lky,6,BONE);jnt(rkx,rky,5,BONE2);jnt(hx,hy+40,7,BONE2);document.getElementById('animCaption').textContent=p>.5?'感受股四頭肌燃燒（橙色區域）':'起始：背靠牆站立';document.getElementById('animWarn').textContent=p>.3?'膝蓋對齊腳趾，絕不能向內塌！':'';}},
+{name:'收操全身伸展',sub:'伸展放鬆 · 60 秒',phase:'收操放鬆',sets:1,duration:60,muscles:[],warns:[],tips:[{i:'✅',t:'兒童式：雙手前伸，臀部坐向腳跟，深呼吸 10 次'},{i:'✅',t:'仰臥抱膝：雙膝抱向胸口，前後輕搖'},{i:'✅',t:'脊椎扭轉：雙腳倒向一側，肩膀不離地'}],speech:'收操伸展。兒童式深呼吸，仰臥抱膝按摩下背，最後脊椎扭轉伸展側腰。讓肌肉充分放鬆，今天訓練完成了。',draw:(t)=>{bg();const c=cx();const ph=Math.floor(t/3)%3;const p=ease(Math.sin((t%3)/3*Math.PI));if(ph===0){const cy=135;hd(c+p*28+18,cy-48+p*18,14);ctx.save();ctx.strokeStyle=BONE2;ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(c+p*22,cy-35+p*12);ctx.lineTo(c,cy);ctx.stroke();ctx.restore();seg(c,cy,c-50,cy+4,7,BONE);seg(c-50,cy+4,c-76+p*8,cy-8+p*18,7,BONE);document.getElementById('animCaption').textContent='兒童式：全身放鬆，深呼吸';}else if(ph===1){const cy=128;hd(c,cy+28,14);seg(c,cy+16,c,cy-18,9,BONE2);const ang=0.85+p*.38;seg(c,cy-4,c+Math.cos(-ang)*52,cy-18+Math.sin(-ang)*52,8,'#2563eb');seg(c,cy-4,c+Math.cos(ang+Math.PI)*52,cy-18+Math.sin(ang+Math.PI)*52,8,'#2563eb');document.getElementById('animCaption').textContent='抱膝：按摩下背，放鬆腰椎';}else{const cy=118;hd(c,cy-38,14);seg(c,cy-26,c,cy+20,9,BONE2);ctx.save();ctx.strokeStyle='#7c3aed';ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.ellipse(c+52+p*18,cy+20,22,14,0,0,Math.PI*2);ctx.stroke();ctx.restore();seg(c,cy-8,c-40,cy,7,'#7c3aed');document.getElementById('animCaption').textContent='脊椎扭轉：側腰深度伸展';}}}
+];
+
+let curIdx=0,curSet=0,timeLeft=0,totalTime=0,running=false,timerIv=null,rafId=null,animT=0,lastTs=0;
+function speak(t){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(t);u.lang='zh-TW';u.rate=.92;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}
+function renderEx(){const ex=EXERCISES[curIdx];document.getElementById('phasePill').textContent=ex.phase;document.getElementById('exName').textContent=ex.name;document.getElementById('exSub').textContent=ex.sub;const pct=Math.round(curIdx/EXERCISES.length*100);document.getElementById('pFill').style.width=pct+'%';document.getElementById('pLbl').textContent=`第 ${curIdx+1} / ${EXERCISES.length} 個動作`;document.getElementById('pPct').textContent=pct+'%';const tags=document.getElementById('exTags');tags.innerHTML='';ex.muscles.forEach(k=>{const m=MUSCLES[k];const t=document.createElement('span');t.className='tag';t.style.cssText=`background:${m.color}22;color:${m.color};border:1px solid ${m.color}44;`;t.textContent=m.label;tags.appendChild(t);});const tipsEl=document.getElementById('exTips');tipsEl.innerHTML='';if(ex.warns[0]){const d=document.createElement('div');d.className='tip';d.innerHTML=`<span>⚠️</span><span style="color:var(--red);font-weight:600;">${ex.warns[0]}</span>`;tipsEl.appendChild(d);}ex.tips.forEach(tip=>{const d=document.createElement('div');d.className='tip';d.innerHTML=`<span>${tip.i}</span><span>${tip.t}</span>`;tipsEl.appendChild(d);});const leg=document.getElementById('muscleLeg');leg.innerHTML='';ex.muscles.forEach(k=>{const m=MUSCLES[k];const item=document.createElement('div');item.className='leg-item';item.innerHTML=`<div class="leg-dot" style="background:${m.color}"></div><span>${m.label}</span>`;leg.appendChild(item);});renderSets();resetTimer();startAnim();document.getElementById('restOv').classList.remove('show');document.getElementById('animWarn').textContent='';}
+function renderSets(){const ex=EXERCISES[curIdx];const dots=document.getElementById('setDots');dots.innerHTML='';for(let i=0;i<ex.sets;i++){const d=document.createElement('div');d.className='dot'+(i<curSet?' done':i===curSet?' active':'');dots.appendChild(d);}}
+function resetTimer(){const ex=EXERCISES[curIdx];timeLeft=ex.duration;totalTime=ex.duration;running=false;clearInterval(timerIv);document.getElementById('tNum').textContent=timeLeft;document.getElementById('tLbl').textContent=ex.sets>1?`第 ${curSet+1} 組，共 ${ex.sets} 組`:'準備開始';document.getElementById('btnStart').textContent='▶ 開始';updateRing(timeLeft,totalTime);}
+function updateRing(l,tot){const off=CIRC*(1-l/tot);document.getElementById('ringFill').style.strokeDashoffset=off;document.getElementById('tNum').textContent=l;}
+function toggleTimer(){if(running){running=false;clearInterval(timerIv);document.getElementById('btnStart').textContent='▶ 繼續';}else{running=true;document.getElementById('btnStart').textContent='⏸ 暫停';if(timeLeft===EXERCISES[curIdx].duration)speak(EXERCISES[curIdx].speech);timerIv=setInterval(tick,1000);}}
+function tick(){timeLeft--;updateRing(timeLeft,totalTime);if(timeLeft===10)speak('還有十秒');if(timeLeft<=3&&timeLeft>0)speak(String(timeLeft));if(timeLeft<=0){clearInterval(timerIv);running=false;const ex=EXERCISES[curIdx];if(curSet+1<ex.sets){speak('這組完成，休息十秒');showRest(10,()=>{curSet++;renderSets();resetTimer();});}else{speak('動作完成，進入下一個');curSet=0;setTimeout(()=>nextEx(),800);}}}
+function showRest(sec,cb){const ov=document.getElementById('restOv');ov.classList.add('show');let t=sec;document.getElementById('restN').textContent=t;const iv=setInterval(()=>{t--;document.getElementById('restN').textContent=t;if(t<=0){clearInterval(iv);ov.classList.remove('show');cb();}},1000);}
+function nextEx(){clearInterval(timerIv);running=false;curSet=0;if(curIdx+1>=EXERCISES.length){cancelAnimationFrame(rafId);document.getElementById('mainCard').style.display='none';document.getElementById('doneSc').style.display='block';speak('恭喜完成今日訓練！記得去打卡！');return;}curIdx++;speak(EXERCISES[curIdx].name);renderEx();}
+function prevEx(){clearInterval(timerIv);running=false;curSet=0;if(curIdx>0){curIdx--;renderEx();}}
+function restart(){curIdx=0;curSet=0;document.getElementById('mainCard').style.display='';document.getElementById('doneSc').style.display='none';renderEx();}
+function startAnim(){cancelAnimationFrame(rafId);animT=0;lastTs=0;function loop(ts){if(!lastTs)lastTs=ts;animT+=(ts-lastTs)/1000;lastTs=ts;EXERCISES[curIdx].draw(animT);rafId=requestAnimationFrame(loop);}rafId=requestAnimationFrame(loop);}
+
+init();
+</script>
+</body>
+</html>
