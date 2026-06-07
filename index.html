@@ -11,67 +11,74 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --teal:#1D9E75;--teal-l:#E1F5EE;--teal-d:#085041;
-  --amber:#BA7517;--amber-l:#FAEEDA;--amber-d:#633806;
+  --teal:#1a6b4a;--teal-l:#eaf4ef;--teal-d:#0d3d28;
+  --teal-mid:#2d8f61;
+  --amber:#BA7517;--amber-l:#fef8ee;--amber-d:#633806;
   --blue:#378ADD;--blue-l:#dbeafe;
   --purple:#7F77DD;--purple-l:#EEEDFE;
-  --red:#E24B4A;
-  --text:#1a1a1a;--textm:#64748b;--textl:#94a3b8;
-  --bg:#f8f7f4;--card:white;--border:#e8e8e8;--r:14px;
+  --red:#c0392b;
+  --text:#111111;--textm:#555555;--textl:#999999;
+  --bg:#ffffff;--card:#ffffff;--border:#e5e5e5;--r:12px;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;}
 .app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
 .page{display:none;flex:1;overflow-y:auto;padding:1rem 1rem 5.5rem;}
 .page.active{display:block;}
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
-.nav-btn{flex:1;padding:.6rem 0 .5rem;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--textl);font-size:9px;font-family:inherit;transition:color .2s;}
+.nav-btn{flex:1;padding:.65rem 0 .55rem;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--textl);font-size:9px;font-family:inherit;transition:color .2s;letter-spacing:.3px;}
 .nav-btn.active{color:var(--teal);}
-.nav-icon{font-size:22px;line-height:1;}
-.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:.75rem;overflow:hidden;}
+.nav-icon{font-size:21px;line-height:1;}
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);}
 .card-body{padding:.9rem 1rem;}
-.section-title{font-size:14px;font-weight:600;margin-bottom:.6rem;}
-.phase-pill{display:inline-flex;align-items:center;background:var(--teal-l);color:var(--teal-d);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.section-title{font-size:13px;font-weight:600;margin-bottom:.6rem;letter-spacing:.2px;text-transform:uppercase;color:var(--textm);}
+.phase-pill{display:inline-flex;align-items:center;background:var(--teal-l);color:var(--teal-d);font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.3px;}
 .prog-track{height:3px;background:var(--border);border-radius:2px;margin:.5rem 0;}
-.prog-fill{height:100%;background:var(--teal);border-radius:2px;transition:width .5s;}
+.prog-fill{height:100%;background:var(--teal);border-radius:2px;transition:width .6s ease;}
 .prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--textm);}
 
 /* Video Area */
 .video-wrap{position:relative;width:100%;padding-bottom:56.25%;background:#000;overflow:hidden;}
 .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
 .video-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,transparent 60%,rgba(0,0,0,0.7));pointer-events:none;}
-.video-badges{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:4px;z-index:2;pointer-events:none;}
-.v-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);}
+.video-badges{display:none;}
+.v-badge{display:none;}
 .video-caption{position:absolute;bottom:8px;left:8px;right:8px;z-index:2;pointer-events:none;}
 .v-warn{font-size:11px;color:#ff6b6b;font-weight:600;margin-bottom:2px;}
 .v-cap{font-size:12px;color:rgba(255,255,255,.9);}
 
-.muscle-leg{display:flex;gap:6px;flex-wrap:wrap;padding:.5rem 1rem;background:#f8fafc;border-top:1px solid var(--border);}
-.leg-item{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--textm);}
-.leg-dot{width:9px;height:9px;border-radius:50%;}
-.ex-name{font-size:17px;font-weight:600;margin-bottom:2px;}
-.ex-sub{font-size:12px;color:var(--textm);margin-bottom:8px;}
-.tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
-.tag{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:500;}
+.muscle-leg{display:none;}
+.leg-item{display:none;}
+.leg-dot{display:none;}
+.ex-name{font-size:16px;font-weight:600;margin-bottom:3px;letter-spacing:-.3px;}
+.ex-sub{font-size:11px;color:var(--textl);margin-bottom:10px;letter-spacing:.1px;}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;}
+.tag{font-size:11px;padding:2px 10px;border-radius:4px;font-weight:400;background:#f2f2f2;color:#444;border:none;letter-spacing:.1px;}
 .tips-sec{border-top:1px solid var(--border);padding-top:8px;}
-.tip{font-size:12px;color:var(--textm);margin-bottom:4px;display:flex;gap:5px;line-height:1.5;}
+.tip{font-size:12px;color:var(--textm);margin-bottom:5px;display:flex;gap:8px;line-height:1.55;align-items:flex-start;}
+.tip-icon{flex-shrink:0;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;margin-top:1px;}
+.tip-warn-title{margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid #faeaea;}
+.tip-icon.ok{background:#e8f4ee;color:#1a6b4a;}
+.tip-icon.no{background:#faeaea;color:#c0392b;}
+.tip-icon.warn{background:#fef8ee;color:#8a5c00;}
+.tip-icon.info{background:#f2f2f2;color:#555;}
 .t-ring{margin:0 auto 8px;position:relative;width:88px;height:88px;}
 .t-ring svg{transform:rotate(-90deg);}
 .ring-bg{fill:none;stroke:#f1f5f9;stroke-width:6;}
-.ring-fill{fill:none;stroke:var(--teal);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+.ring-fill{fill:none;stroke:var(--teal);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
 .t-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;}
 .t-lbl{font-size:12px;color:var(--textm);margin-bottom:10px;}
 .set-dots{display:flex;gap:7px;justify-content:center;margin-bottom:12px;}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background .3s;}
 .dot.done{background:var(--teal);}.dot.active{background:var(--amber);}
 .btn-row{display:flex;gap:7px;}
-.btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;color:var(--text);font-family:inherit;transition:all .15s;}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;color:var(--text);font-family:inherit;transition:all .15s;letter-spacing:-.1px;}
 .btn:active{transform:scale(.97);}
-.btn-p{background:var(--teal);color:white;border-color:var(--teal);}
+.btn-p{background:var(--teal);color:white;border-color:var(--teal);font-weight:500;}
 .btn-p:hover{background:var(--teal-d);}
 .nav-row2{display:flex;gap:7px;margin-top:.6rem;}
 
 /* Checkin */
-.streak-banner{background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:var(--r);padding:1.2rem;text-align:center;color:white;margin-bottom:.75rem;}
+.streak-banner{background:var(--teal);border-radius:var(--r);padding:1.2rem;text-align:center;color:white;margin-bottom:.75rem;}
 .streak-big{font-size:52px;font-weight:700;line-height:1;}
 .streak-lbl{font-size:13px;opacity:.9;margin-top:3px;}
 .month-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
@@ -125,7 +132,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .prog-bar{height:9px;background:#f1f5f9;border-radius:5px;overflow:hidden;}
 .prog-bar-fill{height:100%;border-radius:5px;transition:width 1.2s ease;}
 .prog-note{font-size:11px;color:var(--textl);margin-top:3px;}
-.dream-card{background:linear-gradient(135deg,var(--teal),var(--teal-d));border-radius:var(--r);padding:1.2rem;margin-bottom:.75rem;color:white;text-align:center;}
+.dream-card{background:var(--teal-d);border-radius:var(--r);padding:1.2rem;margin-bottom:.75rem;color:white;text-align:center;}
 .note-box{background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:.8rem;margin-top:.5rem;}
 .note-text{font-size:12px;color:#713f12;line-height:1.6;}
 .done-sc{display:none;text-align:center;padding:2.5rem 1rem;}
@@ -153,22 +160,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div class="v-cap" id="vCap"></div>
         </div>
       </div>
-      <div id="cooldownCard" style="display:none;background:#0f172a;padding:1.5rem 1.25rem;">
-        <div style="color:rgba(255,255,255,.9);font-size:14px;font-weight:600;margin-bottom:1rem;text-align:center;">🧘 收操伸展三式</div>
-        <div style="display:flex;flex-direction:column;gap:.85rem;">
-          <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:.75rem 1rem;">
-            <div style="color:#1D9E75;font-size:12px;font-weight:600;margin-bottom:3px;">① 兒童式 · 20 秒</div>
-            <div style="color:rgba(255,255,255,.75);font-size:12px;line-height:1.5;">跪坐，臀部坐向腳跟，雙手前伸貼地，額頭放鬆貼地，深呼吸。</div>
-          </div>
-          <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:.75rem 1rem;">
-            <div style="color:#1D9E75;font-size:12px;font-weight:600;margin-bottom:3px;">② 仰臥抱膝 · 20 秒</div>
-            <div style="color:rgba(255,255,255,.75);font-size:12px;line-height:1.5;">仰臥，雙膝抱向胸口，前後輕搖，按摩下背。</div>
-          </div>
-          <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:.75rem 1rem;">
-            <div style="color:#1D9E75;font-size:12px;font-weight:600;margin-bottom:3px;">③ 脊椎扭轉 · 各 10 秒</div>
-            <div style="color:rgba(255,255,255,.75);font-size:12px;line-height:1.5;">仰臥，雙腳倒向一側，肩膀不離地，感受側腰深度伸展，換邊。</div>
-          </div>
-        </div>
+      <div id="cooldownCard" style="display:none;background:#f8f8f8;padding:1.5rem 1.25rem;text-align:center;">
+        <div style="font-size:36px;margin-bottom:.75rem;" id="cooldownEmoji">🧘</div>
+        <div style="font-size:15px;font-weight:600;color:#111;margin-bottom:.5rem;" id="cooldownTitle">收操放鬆</div>
+        <div style="font-size:13px;color:#555;line-height:1.7;" id="cooldownDesc">跟著計時器，專注呼吸和放鬆。</div>
       </div>
       <div class="muscle-leg" id="muscleLeg"></div>
       <div class="card-body">
@@ -324,94 +319,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 // YouTube video IDs for each exercise - carefully selected tutorials
 const EXERCISES = [
   {
-    name:'貓牛式脊椎活動', sub:'暖身・伸展 · 各 10 次', phase:'暖身',
-    sets:1, duration:40,
-    ytId:'Sdp0_dPc9uw', // Cat Cow - clear demonstration
-    ytStart:0,
-    muscles:[{label:'脊椎延伸肌',color:'#16a34a'},{label:'腹橫肌',color:'#2563eb'}],
-    warns:[], caption:'吸氣脊椎下沉（牛式）→ 吐氣拱背（貓式）',
-    tips:[{i:'✅',t:'吸氣脊椎下沉（牛式），吐氣拱背（貓式）'},{i:'✅',t:'感受每節脊椎依序活動'},{i:'❌',t:'避免腰部塌陷或聳肩'},{i:'⚠️',t:'右手輕鬆撐地，不需用力'}],
-    speech:'貓牛式。四足跪姿，吸氣脊椎下沉，吐氣圓背收腹。感受脊椎延伸肌交替啟動，肩膀放鬆不聳肩。',
-  },
-  {
-    name:'髖屈肌伸展', sub:'暖身・伸展 · 每側 30 秒', phase:'暖身',
-    sets:2, duration:30,
-    ytId:'Q4Ko275cluo', // Kneeling hip flexor stretch
-    ytStart:0,
-    muscles:[{label:'髂腰肌',color:'#dc2626'},{label:'股直肌',color:'#d97706'}],
-    warns:[], caption:'弓箭步，感受大腿前側和腹股溝伸展',
-    tips:[{i:'✅',t:'弓箭步，後腳膝蓋落地，身體直立'},{i:'✅',t:'感受後腳大腿前側和腹股溝伸展'},{i:'❌',t:'身體不要前傾，骨盆保持水平'},{i:'⚠️',t:'膝蓋下方可墊毛巾'}],
-    speech:'髖屈肌伸展。弓箭步後腳膝蓋落地，身體直立，感受大腿前側髂腰肌與股直肌拉開。骨盆保持水平不前傾。',
-  },
-  {
-    name:'肩關節鐘擺運動', sub:'右肩復健 · 各方向 20 圈', phase:'肩部復健',
-    sets:2, duration:40,
-    ytId:'9-DOa672Hxk', // Pendulum shoulder exercises frozen shoulder
-    ytStart:0,
-    muscles:[{label:'關節囊放鬆',color:'#2563eb'},{label:'旋轉肌袖',color:'#7c3aed'}],
-    warns:['不要主動出力！靠重力自然搖擺'], caption:'右臂完全放鬆，靠重力自然畫圓',
-    tips:[{i:'✅',t:'身體前傾，右臂自然下垂，靠重力輕輕畫圓'},{i:'✅',t:'先畫小圓，慢慢擴大，感受肩關節鬆開'},{i:'❌',t:'不要主動用肌肉甩動手臂'},{i:'⚠️',t:'五十肩復健黃金動作，每天都要做'}],
-    speech:'右肩鐘擺運動。身體前傾，右臂完全放鬆下垂，不要主動出力，讓重力帶動手臂畫圓。放鬆關節囊與旋轉肌袖，改善五十肩。',
-  },
-  {
-    name:'靜態臀橋 Hold', sub:'肌力・核心 · 3 組 × 30 秒', phase:'核心與下肢',
-    sets:3, duration:40,
-    ytId:'DxGF-77A7CQ',
-    ytStart:0,
-    muscles:[{label:'臀大肌',color:'#16a34a'},{label:'股二頭肌',color:'#d97706'},{label:'核心穩定',color:'#2563eb'}],
-    warns:['膝蓋不能向內塌！'], caption:'推到最高點撐住不動，感受臀肌持續收縮',
-    tips:[{i:'✅',t:'仰臥屈膝，臀橋推到最高點後維持不動 30 秒'},{i:'✅',t:'感受臀大肌和大腿後側持續出力'},{i:'✅',t:'雙手輕放身側地板，不需要撐起來'},{i:'❌',t:'腰椎不要過度伸展，核心收緊'},{i:'❌',t:'膝蓋不能向內塌，對齊腳趾方向'}],
-    speech:'靜態臀橋。仰臥屈膝，臀橋推到最高點後撐住不動。雙手輕放身側，只有臀部和腳在出力。感受臀大肌持續收縮，腰椎不要過度伸展。',
-  },
-  {
-    name:'側躺蚌殼式', sub:'膝蓋保護 · 每側 15 下', phase:'核心與下肢',
-    sets:2, duration:35,
-    ytId:'vsQugiJgZZE', // Clamshell anatomy alignment tutorial
-    ytStart:0,
-    muscles:[{label:'臀中肌',color:'#7c3aed'}],
-    warns:['骨盆不能旋轉！'], caption:'上方膝蓋向上打開，感受臀部外側臀中肌收縮',
-    tips:[{i:'✅',t:'側躺雙膝彎曲 45°，腳跟併攏，上方膝蓋向上打開'},{i:'✅',t:'感受臀部外側收縮，像蚌殼打開'},{i:'❌',t:'骨盆不能旋轉，保持穩定'},{i:'⚠️',t:'臀中肌弱是膝蓋疼痛主因，這動作很關鍵'}],
-    speech:'側躺蚌殼式。側臥雙膝彎曲，腳跟併攏，上方膝蓋向上打開。感受臀部外側臀中肌收縮。骨盆不能旋轉，強化膝蓋穩定性。',
-  },
-  {
-    name:'死蟲式', sub:'核心穩定 · 3 組 × 8 下', phase:'核心與下肢',
-    sets:3, duration:40,
-    ytId:'9pEHpO7j5j4', // Complete guide dead bug exercise
-    ytStart:0,
-    muscles:[{label:'腹橫肌',color:'#2563eb'},{label:'多裂肌',color:'#16a34a'}],
-    warns:['腰椎離地立刻停！'], caption:'右臂左腿伸展，腰椎全程貼地是唯一指標',
-    tips:[{i:'✅',t:'仰臥手臂朝上雙腿桌式，右臂左腿同時伸展'},{i:'✅',t:'腰椎全程貼地，這是唯一指標'},{i:'❌',t:'下背一旦離地立刻縮小幅度'},{i:'⚠️',t:'右臂伸展幅度可比左臂小，不需對稱'}],
-    speech:'死蟲式。仰臥右臂左腿同時緩慢伸展。腰椎必須全程貼地。下背一旦離地立刻縮小幅度。',
-  },
-  {
-    name:'肩胛骨夾擠', sub:'上背・肩部復健 · 3 組 × 15 下', phase:'上背與肩部',
-    sets:3, duration:30,
-    ytId:'EFg57fHP9FQ', // Scapular retraction Wellen
-    ytStart:0,
-    muscles:[{label:'菱形肌',color:'#16a34a'},{label:'中下斜方肌',color:'#ca8a04'}],
-    warns:['肩膀不能聳肩！'], caption:'肩胛向脊椎中線收緊，維持 3 秒，肩膀下沉',
-    tips:[{i:'✅',t:'雙肩胛向脊椎中線收緊，維持 3 秒'},{i:'✅',t:'感受兩肩胛間深層肌肉收縮，肩膀下沉'},{i:'❌',t:'不要聳肩代償，肩膀保持下沉'},{i:'⚠️',t:'強化後拉肌群，幫助肩關節恢復正常軌跡'}],
-    speech:'肩胛骨夾擠。雙肩胛骨向脊椎中線收緊，感受菱形肌與中下斜方肌收縮，維持三秒。肩膀下沉不要聳肩。',
-  },
-  {
-    name:'躺姿直膝抬腿', sub:'膝蓋復健・股四頭肌 · 每側 15 下', phase:'核心與下肢',
-    sets:2, duration:40,
-    ytId:'zo2pqw794B0',
-    ytStart:0,
-    muscles:[{label:'股四頭肌',color:'#ca8a04'},{label:'髖屈肌',color:'#dc2626'}],
-    warns:['腿要完全打直！'], caption:'仰臥一腿伸直抬高，感受大腿前側收緊',
-    tips:[{i:'✅',t:'仰臥，一腿屈膝踩地，另一腿完全打直'},{i:'✅',t:'打直的腿緩慢抬高到約 45 度，感受大腿前側收緊'},{i:'✅',t:'維持 2 秒再緩慢放下，不要讓腿砸地'},{i:'❌',t:'膝蓋不能彎曲，全程保持伸直'},{i:'⚠️',t:'這是膝蓋復健的黃金動作，物理治療師最愛用'}],
-    speech:'躺姿直膝抬腿。仰臥一腿屈膝踩地，另一腿完全打直緩慢抬高。感受大腿前側股四頭肌收緊，維持兩秒再放下。膝蓋全程保持伸直。',
-  },
-  {
-    name:'站姿提踵', sub:'小腿肌・膝蓋穩定 · 3 組 × 15 下', phase:'核心與下肢',
+    name:'站姿提踵', sub:'小腿肌・膝蓋穩定 · 3 組 × 15 下', phase:'暖身',
     sets:3, duration:35,
     ytId:'KRJIKsY02nE',
     ytStart:0,
     muscles:[{label:'腓腸肌',color:'#2563eb'},{label:'比目魚肌',color:'#7c3aed'}],
     warns:[], caption:'踮起腳尖到最高點，緩慢放下',
     tips:[{i:'✅',t:'站立，雙腳踮起到最高點，頂端停 1 秒'},{i:'✅',t:'緩慢放下，感受小腿肌肉離心收縮'},{i:'✅',t:'可扶牆保持平衡，不影響訓練效果'},{i:'❌',t:'不要快速彈跳，要有控制地上下'},{i:'⚠️',t:'小腿肌是膝蓋穩定的重要支撐，每天都可以練'}],
-    speech:'站姿提踵。雙腳踮起到最高點，頂端停一秒，緩慢放下。感受小腿腓腸肌和比目魚肌的控制，不要快速彈跳。可以扶牆保持平衡。',
+    speech:'站姿提踵。共三組，每組十五下。雙腳踮起到最高點，頂端停一秒，緩慢放下。感受小腿腓腸肌和比目魚肌的控制，不要快速彈跳。可以扶牆保持平衡。',
+  },
+  {
+    name:'肩關節鐘擺運動', sub:'右肩復健 · 各方向 20 圈', phase:'肩部復健',
+    sets:2, duration:40,
+    ytId:'9-DOa672Hxk',
+    ytStart:0,
+    muscles:[{label:'關節囊放鬆',color:'#2563eb'},{label:'旋轉肌袖',color:'#7c3aed'}],
+    warns:['不要主動出力！靠重力自然搖擺'], caption:'右臂完全放鬆，靠重力自然畫圓',
+    tips:[{i:'✅',t:'身體前傾，右臂自然下垂，靠重力輕輕畫圓'},{i:'✅',t:'先畫小圓，慢慢擴大，感受肩關節鬆開'},{i:'❌',t:'不要主動用肌肉甩動手臂'},{i:'⚠️',t:'五十肩復健黃金動作，每天都要做'}],
+    speech:'右肩鐘擺運動。共兩組，每個方向二十圈。身體前傾，右臂完全放鬆下垂，不要主動出力，讓重力帶動手臂畫圓。放鬆關節囊與旋轉肌袖，改善五十肩。',
+  },
+  {
+    name:'髖屈肌伸展', sub:'暖身・伸展 · 每側 30 秒', phase:'暖身',
+    sets:2, duration:30,
+    ytId:'Cbyn2RVrj9s',
+    ytStart:0,
+    muscles:[{label:'髂腰肌',color:'#dc2626'},{label:'股直肌',color:'#d97706'}],
+    warns:['後腳膝蓋要盡量往後！'], caption:'弓箭步，後腳盡量後移，感受大腿前側和腹股溝伸展',
+    tips:[{i:'✅',t:'弓箭步，後腳膝蓋落地並盡量往後推'},{i:'✅',t:'骨盆稍微前傾頂出，才能拉到髂腰肌'},{i:'✅',t:'感受後腳大腿前側和腹股溝深處伸展'},{i:'❌',t:'後腳膝蓋不能垂直地面，要往後推'},{i:'❌',t:'身體不要前傾，保持直立'}],
+    speech:'髖屈肌伸展。共兩組，每側三十秒。弓箭步後腳膝蓋落地並盡量往後推，骨盆稍微前傾頂出，感受大腿前側髂腰肌和腹股溝深處拉開。後腳膝蓋不能垂直地面。',
+  },
+  {
+    name:'貓牛式脊椎活動', sub:'暖身・伸展 · 各 10 次', phase:'暖身',
+    sets:1, duration:40,
+    ytId:'Sdp0_dPc9uw',
+    ytStart:0,
+    muscles:[{label:'脊椎延伸肌',color:'#16a34a'},{label:'腹橫肌',color:'#2563eb'}],
+    warns:[], caption:'吸氣脊椎下沉（牛式）→ 吐氣拱背（貓式）',
+    tips:[{i:'✅',t:'吸氣脊椎下沉（牛式），吐氣拱背（貓式）'},{i:'✅',t:'感受每節脊椎依序活動'},{i:'❌',t:'避免腰部塌陷或聳肩'},{i:'⚠️',t:'右手輕鬆撐地，不需用力'}],
+    speech:'貓牛式。共一組，各做十次。四足跪姿，吸氣脊椎下沉，吐氣圓背收腹。感受脊椎延伸肌交替啟動，肩膀放鬆不聳肩。',
   },
   {
     name:'鳥狗式', sub:'核心穩定・下背 · 3 組 × 每側 8 下', phase:'核心與下肢',
@@ -421,19 +366,86 @@ const EXERCISES = [
     muscles:[{label:'核心穩定肌群',color:'#2563eb'},{label:'臀大肌',color:'#16a34a'},{label:'下背肌群',color:'#ca8a04'}],
     warns:['腰椎不能旋轉！骨盆保持水平'], caption:'對側手腳同時伸展，核心全程穩定',
     tips:[{i:'✅',t:'四足跪姿，右手左腳同時緩慢伸展，維持 3 秒'},{i:'✅',t:'想像背上放一杯水，不能讓它倒掉'},{i:'✅',t:'右手伸展幅度可比左手小，保護右肩'},{i:'❌',t:'腰椎不能旋轉，骨盆全程保持水平'},{i:'❌',t:'不要急速甩出，要緩慢有控制'}],
-    speech:'鳥狗式。四足跪姿，右手左腳同時緩慢伸展，維持三秒。想像背上放一杯水不能倒掉，骨盆保持水平不能旋轉。右手幅度可以小一點，保護右肩。',
+    speech:'鳥狗式。共三組，每側八下。四足跪姿，右手左腳同時緩慢伸展，維持三秒。想像背上放一杯水不能倒掉，骨盆保持水平不能旋轉。右手幅度可以小一點，保護右肩。',
   },
   {
-    name:'收操全身伸展', sub:'伸展放鬆 · 60 秒', phase:'收操放鬆',
-    sets:1, duration:60,
-    ytId:null,
+    name:'死蟲式', sub:'核心穩定 · 3 組 × 8 下', phase:'核心與下肢',
+    sets:3, duration:40,
+    ytId:'9pEHpO7j5j4',
     ytStart:0,
-    muscles:[{label:'全身放鬆',color:'#64748b'}],
-    warns:[], caption:'兒童式 → 抱膝 → 脊椎扭轉，充分放鬆',
-    tips:[{i:'✅',t:'兒童式：雙手前伸，臀部坐向腳跟，深呼吸 10 次'},{i:'✅',t:'仰臥抱膝：雙膝抱向胸口，前後輕搖'},{i:'✅',t:'脊椎扭轉：雙腳倒向一側，肩膀不離地'}],
-    speech:'收操伸展。兒童式深呼吸，仰臥抱膝按摩下背，最後脊椎扭轉伸展側腰。讓肌肉充分放鬆，今天訓練完成了。',
+    muscles:[{label:'腹橫肌',color:'#2563eb'},{label:'多裂肌',color:'#16a34a'}],
+    warns:['腰椎離地立刻停！'], caption:'右臂左腿伸展，腰椎全程貼地是唯一指標',
+    tips:[{i:'✅',t:'仰臥手臂朝上雙腿桌式，右臂左腿同時伸展'},{i:'✅',t:'腰椎全程貼地，這是唯一指標'},{i:'❌',t:'下背一旦離地立刻縮小幅度'},{i:'⚠️',t:'右臂伸展幅度可比左臂小，不需對稱'}],
+    speech:'死蟲式。共三組，每組八下。仰臥右臂左腿同時緩慢伸展。腰椎必須全程貼地。下背一旦離地立刻縮小幅度。',
   },
-];
+  {
+    name:'靜態臀橋 Hold', sub:'肌力・核心 · 3 組 × 30 秒', phase:'核心與下肢',
+    sets:3, duration:40,
+    ytId:'DxGF-77A7CQ',
+    ytStart:0,
+    muscles:[{label:'臀大肌',color:'#16a34a'},{label:'股二頭肌',color:'#d97706'},{label:'核心穩定',color:'#2563eb'}],
+    warns:['膝蓋不能向內塌！'], caption:'推到最高點撐住不動，感受臀肌持續收縮',
+    tips:[{i:'✅',t:'仰臥屈膝，臀橋推到最高點後維持不動 30 秒'},{i:'✅',t:'感受臀大肌和大腿後側持續出力'},{i:'✅',t:'雙手輕放身側地板，不需要撐起來'},{i:'❌',t:'腰椎不要過度伸展，核心收緊'},{i:'❌',t:'膝蓋不能向內塌，對齊腳趾方向'}],
+    speech:'靜態臀橋。共三組，每組撐三十秒。仰臥屈膝，臀橋推到最高點後撐住不動。雙手輕放身側，只有臀部和腳在出力。感受臀大肌持續收縮，腰椎不要過度伸展。',
+  },
+  {
+    name:'躺姿直膝抬腿', sub:'膝蓋復健・股四頭肌 · 每側 15 下', phase:'核心與下肢',
+    sets:2, duration:40,
+    ytId:'zo2pqw794B0',
+    ytStart:0,
+    muscles:[{label:'股四頭肌',color:'#ca8a04'},{label:'髖屈肌',color:'#dc2626'}],
+    warns:['腿要完全打直！'], caption:'仰臥一腿伸直抬高，感受大腿前側收緊',
+    tips:[{i:'✅',t:'仰臥，一腿屈膝踩地，另一腿完全打直'},{i:'✅',t:'打直的腿緩慢抬高到約 45 度，感受大腿前側收緊'},{i:'✅',t:'維持 2 秒再緩慢放下，不要讓腿砸地'},{i:'❌',t:'膝蓋不能彎曲，全程保持伸直'},{i:'⚠️',t:'這是膝蓋復健的黃金動作，物理治療師最愛用'}],
+    speech:'躺姿直膝抬腿。共兩組，每側十五下。仰臥一腿屈膝踩地，另一腿完全打直緩慢抬高。感受大腿前側股四頭肌收緊，維持兩秒再放下。膝蓋全程保持伸直。',
+  },
+  {
+    name:'側躺蚌殼式', sub:'膝蓋保護 · 每側 15 下', phase:'核心與下肢',
+    sets:2, duration:35,
+    ytId:'vsQugiJgZZE',
+    ytStart:0,
+    muscles:[{label:'臀中肌',color:'#7c3aed'}],
+    warns:['骨盆不能旋轉！'], caption:'上方膝蓋向上打開，感受臀部外側臀中肌收縮',
+    tips:[{i:'✅',t:'側躺雙膝彎曲 45°，腳跟併攏，上方膝蓋向上打開'},{i:'✅',t:'感受臀部外側收縮，像蚌殼打開'},{i:'❌',t:'骨盆不能旋轉，保持穩定'},{i:'⚠️',t:'臀中肌弱是膝蓋疼痛主因，這動作很關鍵'}],
+    speech:'側躺蚌殼式。共兩組，每側十五下。側臥雙膝彎曲，腳跟併攏，上方膝蓋向上打開。感受臀部外側臀中肌收縮。骨盆不能旋轉，強化膝蓋穩定性。',
+  },
+  {
+    name:'肩胛骨夾擠', sub:'上背・肩部復健 · 3 組 × 15 下', phase:'上背與肩部',
+    sets:3, duration:30,
+    ytId:'EFg57fHP9FQ',
+    ytStart:0,
+    muscles:[{label:'菱形肌',color:'#16a34a'},{label:'中下斜方肌',color:'#ca8a04'}],
+    warns:['肩膀不能聳肩！'], caption:'肩胛向脊椎中線收緊，維持 3 秒，肩膀下沉',
+    tips:[{i:'✅',t:'雙肩胛向脊椎中線收緊，維持 3 秒'},{i:'✅',t:'感受兩肩胛間深層肌肉收縮，肩膀下沉'},{i:'❌',t:'不要聳肩代償，肩膀保持下沉'},{i:'⚠️',t:'強化後拉肌群，幫助肩關節恢復正常軌跡'}],
+    speech:'肩胛骨夾擠。共三組，每組十五下，每下維持三秒。雙肩胛骨向脊椎中線收緊，感受菱形肌與中下斜方肌收縮，維持三秒。肩膀下沉不要聳肩。',
+  },
+  {
+    name:'兒童式', sub:'收操放鬆 · 30 秒', phase:'收操放鬆',
+    sets:1, duration:30,
+    ytId:null, ytStart:0,
+    muscles:[{label:'脊椎放鬆',color:'#64748b'},{label:'髖屈肌伸展',color:'#94a3b8'}],
+    warns:[], caption:'臀部坐向腳跟，雙手前伸，額頭貼地，深呼吸',
+    tips:[{i:'✅',t:'跪坐，臀部往後坐向腳跟，雙手往前伸直貼地'},{i:'✅',t:'額頭輕放地上，完全放鬆頸部和肩膀'},{i:'✅',t:'深呼吸，每次吐氣感受背部越來越放鬆'},{i:'💡',t:'同時伸展脊椎、髖部和肩膀'}],
+    speech:'兒童式，三十秒。跪坐臀部往後坐向腳跟，雙手前伸貼地，額頭放鬆貼地。深呼吸，感受背部和髖部慢慢放鬆。',
+  },
+  {
+    name:'仰臥抱膝', sub:'收操放鬆 · 30 秒', phase:'收操放鬆',
+    sets:1, duration:30,
+    ytId:null, ytStart:0,
+    muscles:[{label:'下背放鬆',color:'#64748b'},{label:'臀肌伸展',color:'#94a3b8'}],
+    warns:[], caption:'雙膝抱向胸口，前後輕搖，按摩下背',
+    tips:[{i:'✅',t:'仰臥，雙膝彎曲抱向胸口'},{i:'✅',t:'雙手環抱小腿，前後輕輕搖動'},{i:'✅',t:'感受下背被輕柔按摩，腰椎慢慢放鬆'},{i:'💡',t:'可單腳抱膝各停 15 秒，加強伸展'}],
+    speech:'仰臥抱膝，三十秒。仰臥雙膝抱向胸口，前後輕輕搖動，感受下背被按摩放鬆。',
+  },
+  {
+    name:'脊椎扭轉', sub:'收操放鬆 · 每側 20 秒', phase:'收操放鬆',
+    sets:2, duration:20,
+    ytId:null, ytStart:0,
+    muscles:[{label:'側腰伸展',color:'#64748b'},{label:'胸椎旋轉',color:'#94a3b8'}],
+    warns:['肩膀不能離地！'], caption:'雙腳倒向一側，肩膀貼地，感受側腰深度伸展',
+    tips:[{i:'✅',t:'仰臥，雙腳屈膝倒向一側，雙手張開呈十字'},{i:'✅',t:'肩膀全程貼地，感受側腰和胸椎伸展'},{i:'✅',t:'頭可以轉向反方向，加強伸展效果'},{i:'❌',t:'肩膀不能離地，這是唯一要求'}],
+    speech:'脊椎扭轉，每側二十秒，共兩側。仰臥雙腳屈膝倒向一側，肩膀全程貼地，感受側腰深度伸展。頭可以轉向反方向加強效果。',
+  },
+];;
 
 // ===== STORAGE =====
 const STORAGE_KEY='fitness-app-v2';
@@ -474,7 +486,21 @@ function renderEx(){
     frame.src='';
     frame.style.display='none';
     videoWrap.style.display='none';
-    if(textCard) textCard.style.display='block';
+    if(textCard){
+      textCard.style.display='block';
+      const emojiMap={'兒童式':'🧘','仰臥抱膝':'🤗','脊椎扭轉':'🌀'};
+      const descMap={
+        '兒童式':'跪坐臀部往後坐向腳跟，雙手前伸貼地，額頭放鬆貼地。深呼吸，感受背部慢慢放鬆。',
+        '仰臥抱膝':'仰臥雙膝抱向胸口，前後輕輕搖動，感受下背被輕柔按摩。',
+        '脊椎扭轉':'仰臥雙腳屈膝倒向一側，肩膀全程貼地，感受側腰深度伸展。頭可轉向反方向。'
+      };
+      const emoji = document.getElementById('cooldownEmoji');
+      const title = document.getElementById('cooldownTitle');
+      const desc = document.getElementById('cooldownDesc');
+      if(emoji) emoji.textContent = emojiMap[ex.name]||'🧘';
+      if(title) title.textContent = ex.name;
+      if(desc) desc.textContent = descMap[ex.name]||ex.caption;
+    }
   }
 
   // Muscle badges
@@ -487,12 +513,25 @@ function renderEx(){
 
   // Tags
   const tags=document.getElementById('exTags');tags.innerHTML='';
-  ex.muscles.forEach(m=>{const t=document.createElement('span');t.className='tag';t.style.cssText=`background:${m.color}22;color:${m.color};border:1px solid ${m.color}44;`;t.textContent=m.label;tags.appendChild(t);});
+  ex.muscles.forEach(m=>{const t=document.createElement('span');t.className='tag';t.textContent=m.label;tags.appendChild(t);});
 
   // Tips
   const tipsEl=document.getElementById('exTips');tipsEl.innerHTML='';
-  if(ex.warns[0]){const d=document.createElement('div');d.className='tip';d.innerHTML=`<span>⚠️</span><span style="color:var(--red);font-weight:600;">${ex.warns[0]}</span>`;tipsEl.appendChild(d);}
-  ex.tips.forEach(tip=>{const d=document.createElement('div');d.className='tip';d.innerHTML=`<span>${tip.i}</span><span>${tip.t}</span>`;tipsEl.appendChild(d);});
+  if(ex.warns[0]){
+    const d=document.createElement('div');d.className='tip tip-warn-title';
+    d.innerHTML=`<span style="color:#c0392b;font-weight:600;font-size:12px;">${ex.warns[0]}</span>`;
+    tipsEl.appendChild(d);
+  }
+  ex.tips.forEach(tip=>{
+    const d=document.createElement('div');d.className='tip';
+    let cls='info',sym='·';
+    if(tip.i==='✅'){cls='ok';sym='✓';}
+    else if(tip.i==='❌'){cls='no';sym='✕';}
+    else if(tip.i==='⚠️'){cls='warn';sym='!';}
+    else if(tip.i==='💡'){cls='info';sym='i';}
+    d.innerHTML=`<span class="tip-icon ${cls}">${sym}</span><span>${tip.t}</span>`;
+    tipsEl.appendChild(d);
+  });
 
   // Muscle legend
   const leg=document.getElementById('muscleLeg');leg.innerHTML='';
