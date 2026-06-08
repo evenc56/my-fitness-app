@@ -40,12 +40,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
 /* Video Area */
 .video-wrap{position:relative;width:100%;padding-bottom:48%;background:#000;overflow:hidden;}
 .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-.video-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,transparent 60%,rgba(0,0,0,0.7));pointer-events:none;}
+.video-overlay{display:none;}
 .video-badges{display:none;}
 .v-badge{display:none;}
-.video-caption{position:absolute;bottom:8px;left:8px;right:8px;z-index:2;pointer-events:none;}
-.v-warn{font-size:11px;color:#ff6b6b;font-weight:600;margin-bottom:2px;}
-.v-cap{font-size:12px;color:rgba(255,255,255,.9);}
+.video-caption{display:none;}
+.v-warn{display:none;}
+.v-cap{display:none;}
 
 .muscle-leg{display:none;}
 .leg-item{display:none;}
@@ -156,10 +156,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
         <iframe id="ytFrame" src="" allowfullscreen allow="autoplay; encrypted-media" loading="lazy"></iframe>
         <div class="video-overlay"></div>
         <div class="video-badges" id="vBadges"></div>
-        <div class="video-caption">
-          <div class="v-warn" id="vWarn"></div>
-          <div class="v-cap" id="vCap"></div>
-        </div>
+        <div id="vWarn" style="display:none;"></div>
+        <div id="vCap" style="display:none;"></div>
       </div>
       <div id="cooldownCard" style="display:none;background:#f8f8f8;padding:1.5rem 1.25rem;text-align:center;flex-shrink:0;">
         <div style="font-size:36px;margin-bottom:.75rem;" id="cooldownEmoji">🧘</div>
@@ -167,7 +165,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
         <div style="font-size:13px;color:#555;line-height:1.7;" id="cooldownDesc">跟著計時器，專注呼吸和放鬆。</div>
       </div>
       <div class="muscle-leg" id="muscleLeg"></div>
-      <div class="card-body">
+      <div style="flex:1;overflow-y:auto;padding:.75rem 1rem .5rem;">
         <div class="ex-name" id="exName"></div>
         <div class="ex-sub" id="exSub"></div>
         <div class="tags" id="exTags"></div>
@@ -320,8 +318,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
 // YouTube video IDs for each exercise - carefully selected tutorials
 const EXERCISES = [
   {
-    name:'站姿提踵', sub:'小腿肌・膝蓋穩定 · 3 組 × 15 下', phase:'暖身',
-    sets:3, duration:35,
+    name:'站姿提踵', sub:'強化小腿，穩定膝蓋 · 3 組 × 15 下', phase:'暖身',
+    sets:3, duration:55,
     ytId:'KRJIKsY02nE',
     ytStart:0,
     muscles:[{label:'腓腸肌',color:'#2563eb'},{label:'比目魚肌',color:'#7c3aed'}],
@@ -330,7 +328,7 @@ const EXERCISES = [
     speech:'站姿提踵。共三組，每組十五下。雙腳踮起到最高點，頂端停一秒，緩慢放下。感受小腿腓腸肌和比目魚肌的控制，不要快速彈跳。可以扶牆保持平衡。',
   },
   {
-    name:'肩關節鐘擺運動', sub:'右肩復健 · 各方向 20 圈', phase:'肩部復健',
+    name:'肩關節鐘擺運動', sub:'放鬆右肩關節，改善五十肩 · 各方向 20 圈', phase:'肩部復健',
     sets:2, duration:40,
     ytId:'9-DOa672Hxk',
     ytStart:0,
@@ -340,18 +338,18 @@ const EXERCISES = [
     speech:'右肩鐘擺運動。共兩組，每個方向二十圈。身體前傾，右臂完全放鬆下垂，不要主動出力，讓重力帶動手臂畫圓。放鬆關節囊與旋轉肌袖，改善五十肩。',
   },
   {
-    name:'單腳站立', sub:'平衡・步態訓練 · 每側 30 秒，共 2 組', phase:'暖身',
-    sets:2, duration:30,
+    name:'單腳站立', sub:'訓練平衡與步態穩定 · 每側 30 秒，共 2 組', phase:'暖身',
+    sets:2, duration:35,
     ytId:'Wb68ze1oH5c',
     ytStart:0,
     muscles:[{label:'臀中肌',color:'#16a34a'},{label:'踝關節穩定',color:'#2563eb'},{label:'核心穩定',color:'#64748b'}],
     warns:['支撐腳膝蓋微彎，不要鎖死！'],
     caption:'單腳站穩 30 秒，感受臀部外側在出力',
     tips:[{i:'✅',t:'站立，抬起一腳，支撐腳膝蓋微彎不鎖死'},{i:'✅',t:'感受臀部外側和腳踝在出力維持平衡'},{i:'✅',t:'初期可以扶牆，逐漸減少依賴'},{i:'✅',t:'進階：閉眼做，大幅提升難度'},{i:'💡',t:'刷牙、等電梯時也可以練，效果一樣好'}],
-    speech:'單腳站立。每側三十秒，共兩組。站立抬起一腳，支撐腳膝蓋微彎不鎖死。感受臀部外側和腳踝在出力維持平衡。初期可以扶牆，逐漸減少依賴。',
+    speech:'單腳站立，訓練平衡與步態穩定。每側三十秒，共兩組。站立抬起一腳，支撐腳膝蓋微彎不鎖死。感受臀部外側和腳踝在出力維持平衡。初期可以扶牆。',
   },
   {
-    name:'髖屈肌伸展', sub:'暖身・伸展 · 每側 30 秒', phase:'暖身',
+    name:'髖屈肌伸展', sub:'放鬆髖部，改善走路姿勢 · 每側 30 秒', phase:'暖身',
     sets:2, duration:30,
     ytId:'Cbyn2RVrj9s',
     ytStart:0,
@@ -361,7 +359,7 @@ const EXERCISES = [
     speech:'髖屈肌伸展。共兩組，每側三十秒。弓箭步後腳膝蓋落地並盡量往後推，骨盆稍微前傾頂出，感受大腿前側髂腰肌和腹股溝深處拉開。後腳膝蓋不能垂直地面。',
   },
   {
-    name:'貓牛式脊椎活動', sub:'暖身・伸展 · 各 10 次', phase:'暖身',
+    name:'貓牛式脊椎活動', sub:'活化脊椎，暖身核心 · 各 10 次', phase:'暖身',
     sets:1, duration:40,
     ytId:'Sdp0_dPc9uw',
     ytStart:0,
@@ -371,8 +369,8 @@ const EXERCISES = [
     speech:'貓牛式。共一組，各做十次。四足跪姿，吸氣脊椎下沉，吐氣圓背收腹。感受脊椎延伸肌交替啟動，肩膀放鬆不聳肩。',
   },
   {
-    name:'鳥狗式', sub:'核心穩定・下背 · 3 組 × 每側 8 下', phase:'核心與下肢',
-    sets:3, duration:40,
+    name:'鳥狗式', sub:'核心穩定與下背控制 · 3 組 × 每側 8 下', phase:'核心與下肢',
+    sets:3, duration:60,
     ytId:'ZeU8u0dQbxs',
     ytStart:0,
     muscles:[{label:'核心穩定肌群',color:'#2563eb'},{label:'臀大肌',color:'#16a34a'},{label:'下背肌群',color:'#ca8a04'}],
@@ -381,8 +379,8 @@ const EXERCISES = [
     speech:'鳥狗式。共三組，每側八下。四足跪姿，右手左腳同時緩慢伸展，維持三秒。想像背上放一杯水不能倒掉，骨盆保持水平不能旋轉。右手幅度可以小一點，保護右肩。',
   },
   {
-    name:'死蟲式', sub:'核心穩定 · 3 組 × 8 下', phase:'核心與下肢',
-    sets:3, duration:40,
+    name:'死蟲式', sub:'深層核心，保護脊椎 · 3 組 × 8 下', phase:'核心與下肢',
+    sets:3, duration:55,
     ytId:'9pEHpO7j5j4',
     ytStart:0,
     muscles:[{label:'腹橫肌',color:'#2563eb'},{label:'多裂肌',color:'#16a34a'}],
@@ -391,7 +389,7 @@ const EXERCISES = [
     speech:'死蟲式。共三組，每組八下。仰臥右臂左腿同時緩慢伸展。腰椎必須全程貼地。下背一旦離地立刻縮小幅度。',
   },
   {
-    name:'靜態臀橋 Hold', sub:'肌力・核心 · 3 組 × 30 秒', phase:'核心與下肢',
+    name:'靜態臀橋 Hold', sub:'強化臀肌，保護膝蓋 · 3 組 × 30 秒', phase:'核心與下肢',
     sets:3, duration:40,
     ytId:'DxGF-77A7CQ',
     ytStart:0,
@@ -401,8 +399,8 @@ const EXERCISES = [
     speech:'靜態臀橋。共三組，每組撐三十秒。仰臥屈膝，臀橋推到最高點後撐住不動。雙手輕放身側，只有臀部和腳在出力。感受臀大肌持續收縮，腰椎不要過度伸展。',
   },
   {
-    name:'躺姿直膝抬腿', sub:'膝蓋復健・股四頭肌 · 每側 15 下', phase:'核心與下肢',
-    sets:2, duration:40,
+    name:'躺姿直膝抬腿', sub:'強化股四頭肌，膝蓋復健 · 每側 15 下', phase:'核心與下肢',
+    sets:2, duration:60,
     ytId:'zo2pqw794B0',
     ytStart:0,
     muscles:[{label:'股四頭肌',color:'#ca8a04'},{label:'髖屈肌',color:'#dc2626'}],
@@ -411,8 +409,8 @@ const EXERCISES = [
     speech:'躺姿直膝抬腿。共兩組，每側十五下。仰臥一腿屈膝踩地，另一腿完全打直緩慢抬高。感受大腿前側股四頭肌收緊，維持兩秒再放下。膝蓋全程保持伸直。',
   },
   {
-    name:'側躺蚌殼式', sub:'膝蓋保護 · 每側 15 下', phase:'核心與下肢',
-    sets:2, duration:35,
+    name:'側躺蚌殼式', sub:'強化臀中肌，預防膝蓋內塌 · 每側 15 下', phase:'核心與下肢',
+    sets:2, duration:55,
     ytId:'vsQugiJgZZE',
     ytStart:0,
     muscles:[{label:'臀中肌',color:'#7c3aed'}],
@@ -421,8 +419,8 @@ const EXERCISES = [
     speech:'側躺蚌殼式。共兩組，每側十五下。側臥雙膝彎曲，腳跟併攏，上方膝蓋向上打開。感受臀部外側臀中肌收縮。骨盆不能旋轉，強化膝蓋穩定性。',
   },
   {
-    name:'肩胛骨夾擠', sub:'上背・肩部復健 · 3 組 × 15 下', phase:'上背與肩部',
-    sets:3, duration:30,
+    name:'肩胛骨夾擠', sub:'強化上背，穩定右肩 · 3 組 × 15 下', phase:'上背與肩部',
+    sets:3, duration:55,
     ytId:'EFg57fHP9FQ',
     ytStart:0,
     muscles:[{label:'菱形肌',color:'#16a34a'},{label:'中下斜方肌',color:'#ca8a04'}],
@@ -520,8 +518,8 @@ function renderEx(){
   ex.muscles.forEach(m=>{const b=document.createElement('div');b.className='v-badge';b.style.color=m.color;b.textContent=m.label;badges.appendChild(b);});
 
   // Caption & warn
-  document.getElementById('vCap').textContent=ex.caption||'';
-  document.getElementById('vWarn').textContent=ex.warns[0]||'';
+  // vCap hidden
+  // vWarn hidden (shown in tips section instead)
 
   // Tags
   const tags=document.getElementById('exTags');tags.innerHTML='';
@@ -581,7 +579,7 @@ function stopSpeech(){
 
 // ===== TIMER =====
 const CIRC=201;
-let curIdx=0,curSet=0,timeLeft=0,totalTime=0,running=false,timerIv=null;
+let curIdx=0,curSet=0,timeLeft=0,totalTime=0,running=false,timerIv=null,pendingNext=false;
 
 function renderSets(){const ex=EXERCISES[curIdx];const dots=document.getElementById('setDots');dots.innerHTML='';for(let i=0;i<ex.sets;i++){const d=document.createElement('div');d.className='dot'+(i<curSet?' done':i===curSet?' active':'');dots.appendChild(d);}}
 function resetTimer(){const ex=EXERCISES[curIdx];timeLeft=ex.duration;totalTime=ex.duration;running=false;clearInterval(timerIv);document.getElementById('tNum').textContent=timeLeft;document.getElementById('tLbl').textContent=ex.sets>1?`第 ${curSet+1} 組，共 ${ex.sets} 組`:'準備開始';document.getElementById('btnStart').textContent='▶ 開始';updateRing(timeLeft,totalTime);}
@@ -589,20 +587,27 @@ function updateRing(l,tot){const off=CIRC*(1-l/tot);document.getElementById('rin
 
 function toggleTimer(){
   if(running){
-    // 暫停：計時器停，語音暫停（不取消）
-    running=false;
-    clearInterval(timerIv);
-    pauseSpeech();
+    running=false;clearInterval(timerIv);pauseSpeech();
     document.getElementById('btnStart').textContent='▶ 繼續';
   } else {
-    // 繼續或第一次開始
+    // If previous exercise just finished, advance to next first
+    if(pendingNext){
+      pendingNext=false;
+      if(curIdx+1>=EXERCISES.length){
+        document.getElementById('mainCard').style.display='none';
+        document.getElementById('doneSc').style.display='block';
+        speak('恭喜完成今日訓練！記得去打卡！');
+        return;
+      }
+      curIdx++;
+      renderEx();
+      // speech will be triggered below on first start
+    }
     running=true;
     document.getElementById('btnStart').textContent='⏸ 暫停';
     if(timeLeft===EXERCISES[curIdx].duration){
-      // 第一次開始：播報完整說明
       speak(EXERCISES[curIdx].speech);
     } else {
-      // 繼續：恢復被暫停的語音
       resumeSpeech();
     }
     timerIv=setInterval(tick,1000);
@@ -616,24 +621,46 @@ function tick(){
   if(timeLeft<=0){
     clearInterval(timerIv);running=false;
     const ex=EXERCISES[curIdx];
-    if(curSet+1<ex.sets){speak('這組完成，休息十秒');showRest(10,()=>{curSet++;renderSets();resetTimer();});}
-    else{speak('動作完成，進入下一個');curSet=0;setTimeout(()=>nextEx(),800);}
+    if(curSet+1<ex.sets){
+      speak('這組完成，休息十秒');
+      showRest(10,()=>{curSet++;renderSets();resetTimer();});
+    } else {
+      // Done - just say complete, reset button, wait for user
+      speak('完成');
+      curSet=0;
+      document.getElementById('btnStart').textContent='▶ 開始';
+      document.getElementById('tLbl').textContent='準備下一個動作';
+      // Pre-advance index so next press goes to next exercise
+      pendingNext=true;
+    }
   }
 }
 
+const SET_REPS_TEXT={
+  '站姿提踵':'十五下','單腳站立':'三十秒','鳥狗式':'八下',
+  '死蟲式':'八下','躺姿直膝抬腿':'十五下','側躺蚌殼式':'十五下',
+  '肩胛骨夾擠':'十五下','髖屈肌伸展':'三十秒','肩關節鐘擺運動':'二十圈',
+};
+function setNumToText(n){const m=['一','二','三','四','五'];return m[n-1]||String(n);}
 function showRest(sec,cb){
-  // Simple overlay on timer label
   document.getElementById('tLbl').textContent='組間休息 '+sec+'秒';
   let t=sec;
   const iv=setInterval(()=>{
     t--;
     document.getElementById('tLbl').textContent='組間休息 '+t+'秒';
-    if(t<=0){clearInterval(iv);cb();}
+    if(t<=0){
+      clearInterval(iv);
+      // Speak next set info
+      const ex=EXERCISES[curIdx];
+      const reps=SET_REPS_TEXT[ex.name]||'';
+      speak(`第${setNumToText(curSet+1)}組${reps?'，'+reps:''}。`);
+      cb();
+    }
   },1000);
 }
 
 function nextEx(){
-  clearInterval(timerIv);stopSpeech();running=false;curSet=0;
+  clearInterval(timerIv);stopSpeech();running=false;curSet=0;pendingNext=false;
   if(curIdx+1>=EXERCISES.length){
     document.getElementById('mainCard').style.display='none';
     document.getElementById('doneSc').style.display='block';
@@ -641,7 +668,7 @@ function nextEx(){
   }
   curIdx++;speak(EXERCISES[curIdx].name);renderEx();
 }
-function prevEx(){clearInterval(timerIv);stopSpeech();running=false;curSet=0;if(curIdx>0){curIdx--;renderEx();}}
+function prevEx(){clearInterval(timerIv);stopSpeech();running=false;curSet=0;pendingNext=false;if(curIdx>0){curIdx--;renderEx();}}
 function restart(){curIdx=0;curSet=0;renderEx();}
 function sendToChat(type){const ex=EXERCISES[curIdx];if(type==='詳細說明')alert(`請回到 Claude 對話，輸入：\n「請詳細說明『${ex.name}』的做法、出力肌群與注意事項」`);else alert(`請回到 Claude 對話，輸入：\n「我做『${ex.name}』時右肩或膝蓋不舒服，怎麼調整？」`);}
 
