@@ -137,6 +137,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
 .note-box{background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:.8rem;margin-top:.5rem;}
 .note-text{font-size:12px;color:#713f12;line-height:1.6;}
 .done-sc{display:none;text-align:center;padding:2.5rem 1rem;}
+
+/* Assessment styles */
+.assess-page{padding:1rem 1rem 5.5rem;}
+.assess-banner{background:var(--teal);color:white;border-radius:var(--r);padding:.9rem 1rem;margin-bottom:.75rem;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.assess-banner-icon{font-size:22px;flex-shrink:0;}
+.assess-banner-text{flex:1;}
+.assess-banner-title{font-size:13px;font-weight:600;}
+.assess-banner-sub{font-size:11px;opacity:.85;margin-top:1px;}
+.assess-banner-arrow{font-size:16px;opacity:.8;}
+.slider-wrap{margin-bottom:1rem;}
+.slider-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.slider-name{font-size:13px;font-weight:500;color:var(--text);}
+.slider-val{font-size:18px;font-weight:700;color:var(--teal);min-width:28px;text-align:right;}
+input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;-webkit-appearance:none;background:linear-gradient(to right,var(--teal) 0%,var(--teal) 50%,var(--border) 50%,var(--border) 100%);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--teal);cursor:pointer;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.slider-hints{display:flex;justify-content:space-between;font-size:10px;color:var(--textl);margin-top:3px;}
+.open-q{margin-bottom:1rem;}
+.open-q label{font-size:13px;font-weight:500;color:var(--text);display:block;margin-bottom:6px;}
+.open-q textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;font-size:13px;font-family:inherit;color:var(--text);resize:none;outline:none;line-height:1.5;}
+.open-q textarea:focus{border-color:var(--teal);}
+.input-row{display:flex;gap:8px;margin-bottom:1rem;}
+.input-item{flex:1;}
+.input-item label{font-size:12px;color:var(--textm);display:block;margin-bottom:4px;}
+.input-item input{width:100%;border:1px solid var(--border);border-radius:8px;padding:.5rem .7rem;font-size:14px;font-family:inherit;text-align:center;outline:none;}
+.input-item input:focus{border-color:var(--teal);}
+.radio-group{display:flex;gap:6px;flex-wrap:wrap;}
+.radio-btn{padding:5px 12px;border-radius:8px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;color:var(--textm);transition:all .2s;}
+.radio-btn.selected{background:var(--teal-l);border-color:var(--teal);color:var(--teal-d);font-weight:600;}
+.compare-card{background:var(--teal-l);border-radius:10px;padding:.75rem 1rem;margin-bottom:.75rem;}
+.compare-title{font-size:12px;font-weight:600;color:var(--teal-d);margin-bottom:.4rem;}
+.compare-row{font-size:12px;color:var(--teal-d);margin-bottom:2px;display:flex;gap:6px;}
+.submit-btn{width:100%;padding:12px;border-radius:10px;border:none;background:var(--teal);color:white;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;}
+.submit-btn:active{transform:scale(.97);}
+.submit-btn:disabled{background:#ccc;cursor:not-allowed;}
 </style>
 </head>
 <body>
@@ -203,6 +237,81 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
   </div>
 </div>
 
+<!-- MOVEMENT ASSESSMENT PAGE -->
+<div class="page" id="page-movement">
+  <div style="font-size:17px;font-weight:600;margin-bottom:.1rem;">動作評估</div>
+  <div style="font-size:11px;color:var(--textl);margin-bottom:.8rem;" id="movementDate"></div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">① 單腳站立（閉眼）</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">站立閉眼，計時單腳能撐幾秒，兩腳各測一次</div>
+      <div class="input-row">
+        <div class="input-item"><label>左腳（秒）</label><input type="number" id="balanceL" placeholder="0" min="0" max="120"></div>
+        <div class="input-item"><label>右腳（秒）</label><input type="number" id="balanceR" placeholder="0" min="0" max="120"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">② 肩膀活動度</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">右手從背後往上、左手從肩上往下，兩手距離幾公分（能碰到填 0，超過填負數）</div>
+      <div class="input-row">
+        <div class="input-item"><label>兩手距離（cm）</label><input type="number" id="shoulderDist" placeholder="0"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">③ 髖屈肌緊繃測試</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">仰臥一腿抱膝，另一腿自然放下——放下的腿有沒有懸空？</div>
+      <div style="margin-bottom:.5rem;"><div style="font-size:12px;font-weight:500;margin-bottom:.4rem;">左腳</div><div class="radio-group" id="hipL"><span class="radio-btn" onclick="selectRadio(this,'hipL','懸空明顯')">懸空明顯</span><span class="radio-btn" onclick="selectRadio(this,'hipL','稍微懸空')">稍微懸空</span><span class="radio-btn" onclick="selectRadio(this,'hipL','貼地')">貼地</span></div></div>
+      <div><div style="font-size:12px;font-weight:500;margin-bottom:.4rem;">右腳</div><div class="radio-group" id="hipR"><span class="radio-btn" onclick="selectRadio(this,'hipR','懸空明顯')">懸空明顯</span><span class="radio-btn" onclick="selectRadio(this,'hipR','稍微懸空')">稍微懸空</span><span class="radio-btn" onclick="selectRadio(this,'hipR','貼地')">貼地</span></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">④ 臀肌啟動感受</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">趴著單腿往上抬，感受是臀部先出力還是下背先出力？</div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span class="slider-name">臀肌啟動感受</span><span class="slider-val" id="gluteVal">5</span></div>
+        <input type="range" min="1" max="10" value="5" oninput="updateSlider(this,'gluteVal')">
+        <div class="slider-hints"><span>下背代償</span><span>臀肌清楚出力</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">⑤ 整體感受</div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span class="slider-name">這兩週整體體能狀況</span><span class="slider-val" id="overallVal">5</span></div>
+        <input type="range" min="1" max="10" value="5" oninput="updateSlider(this,'overallVal')">
+        <div class="slider-hints"><span>很差</span><span>很好</span></div>
+      </div>
+      <div class="open-q">
+        <label>深蹲觀察（手機側錄後填）</label>
+        <textarea id="squatNote" rows="2" placeholder="膝蓋有沒有內塌？腳跟有沒有抬起？身體有沒有過度前傾？"></textarea>
+      </div>
+      <div class="open-q">
+        <label>這兩週最大的變化或發現</label>
+        <textarea id="movementNote" rows="3" placeholder="哪個動作進步最多？有沒有新的感受或問題？"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-card" id="movementCompare" style="display:none;">
+    <div class="compare-title">📊 與上次比較</div>
+    <div id="compareContent"></div>
+  </div>
+
+  <button class="submit-btn" onclick="submitMovement()">儲存評估並送出</button>
+  <div style="height:.75rem;"></div>
+</div>
+
 <!-- CHECKIN PAGE -->
 <div class="page" id="page-checkin">
   <div style="font-size:18px;font-weight:600;margin-bottom:.1rem;">訓練紀錄</div>
@@ -231,42 +340,157 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
       <div class="history-row" id="historyRow"></div>
     </div>
   </div>
+  <!-- Assessment Banner -->
+  <div id="assessBanner" style="display:none;" class="assess-banner" onclick="goPage('movement')">
+    <div class="assess-banner-icon">📋</div>
+    <div class="assess-banner-text">
+      <div class="assess-banner-title">本期動作評估開始</div>
+      <div class="assess-banner-sub">請在三天內完成，點此進入評估</div>
+    </div>
+    <div class="assess-banner-arrow">→</div>
+  </div>
+
   <div class="card">
     <div class="card-body">
       <div class="section-title">📝 今日自我評估</div>
-      <div class="eval-item">
-        <div class="eval-label">下樓梯膝蓋不適程度</div>
-        <div class="eval-scale">
-          <button class="eval-btn" onclick="selectEval(this,'knee',1)">很痛</button>
-          <button class="eval-btn" onclick="selectEval(this,'knee',2)">有點</button>
-          <button class="eval-btn" onclick="selectEval(this,'knee',3)">輕微</button>
-          <button class="eval-btn" onclick="selectEval(this,'knee',4)">沒有</button>
-        </div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span class="slider-name">膝蓋不適程度</span><span class="slider-val" id="kneeVal">5</span></div>
+        <input type="range" min="1" max="10" value="5" oninput="updateSlider(this,'kneeVal')">
+        <div class="slider-hints"><span>1 很痛</span><span>10 完全沒事</span></div>
       </div>
-      <div class="eval-item">
-        <div class="eval-label">右肩活動範圍感覺</div>
-        <div class="eval-scale">
-          <button class="eval-btn" onclick="selectEval(this,'shoulder',1)">很緊</button>
-          <button class="eval-btn" onclick="selectEval(this,'shoulder',2)">還緊</button>
-          <button class="eval-btn" onclick="selectEval(this,'shoulder',3)">鬆多了</button>
-          <button class="eval-btn" onclick="selectEval(this,'shoulder',4)">很好</button>
-        </div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span class="slider-name">右肩活動範圍</span><span class="slider-val" id="shoulderVal">5</span></div>
+        <input type="range" min="1" max="10" value="5" oninput="updateSlider(this,'shoulderVal')">
+        <div class="slider-hints"><span>1 很緊</span><span>10 很好</span></div>
       </div>
-      <div class="eval-item">
-        <div class="eval-label">今天訓練感覺</div>
-        <div class="eval-scale">
-          <button class="eval-btn" onclick="selectEval(this,'feel',1)">很累</button>
-          <button class="eval-btn" onclick="selectEval(this,'feel',2)">還好</button>
-          <button class="eval-btn" onclick="selectEval(this,'feel',3)">輕鬆</button>
-          <button class="eval-btn" onclick="selectEval(this,'feel',4)">很好</button>
-        </div>
+      <div class="slider-wrap">
+        <div class="slider-label"><span class="slider-name">今天訓練感覺</span><span class="slider-val" id="feelVal">5</span></div>
+        <input type="range" min="1" max="10" value="5" oninput="updateSlider(this,'feelVal')">
+        <div class="slider-hints"><span>1 很累很痛</span><span>10 輕鬆有感</span></div>
       </div>
-      <button class="btn btn-p" style="width:100%;margin-top:.5rem;" onclick="saveEval()">儲存評估</button>
+      <div class="open-q" style="margin-top:.25rem;">
+        <label>今日備註（可選）</label>
+        <textarea id="dailyNote" rows="2" placeholder="任何感受、發現或想法..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="saveEval()">儲存評估</button>
       <div class="note-box" style="margin-top:.75rem;">
-        <div class="note-text">💡 建議每兩週評估一次，追蹤膝蓋和肩膀的改善狀況。右肩復健建議配合物理治療師。</div>
+        <div class="note-text">💡 右肩復健建議配合物理治療師。動作評估每月 1 日和 15 日進行。</div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- MOVEMENT ASSESSMENT PAGE -->
+<div class="page" id="page-movement">
+  <div style="font-size:18px;font-weight:600;margin-bottom:.1rem;">動作評估</div>
+  <div style="font-size:12px;color:var(--textm);margin-bottom:.8rem;" id="movementDateLabel"></div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">① 單腳站立（平衡測試）</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">閉眼單腳站，計時幾秒。測試平衡與核心穩定。</div>
+      <div class="eval-item">
+        <div class="eval-label">左腳（秒）</div>
+        <input type="number" id="m-balanceL" placeholder="例：12" min="0" max="120"
+          style="width:100%;padding:.6rem .75rem;border:1px solid var(--border);border-radius:8px;font-size:14px;margin-top:4px;outline:none;">
+      </div>
+      <div class="eval-item">
+        <div class="eval-label">右腳（秒）</div>
+        <input type="number" id="m-balanceR" placeholder="例：8" min="0" max="120"
+          style="width:100%;padding:.6rem .75rem;border:1px solid var(--border);border-radius:8px;font-size:14px;margin-top:4px;outline:none;">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">② 肩膀活動度</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">右手從背後往上摸，左手從肩膀往下摸，兩手距離幾公分？負數代表已能碰到。</div>
+      <div class="eval-item">
+        <div class="eval-label">兩手距離（公分，能碰到填 0 或負數）</div>
+        <input type="number" id="m-shoulderDist" placeholder="例：5 或 -2" min="-30" max="50"
+          style="width:100%;padding:.6rem .75rem;border:1px solid var(--border);border-radius:8px;font-size:14px;margin-top:4px;outline:none;">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">③ 髖屈肌緊繃測試</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">仰臥一腿抱膝，另一腿自然放下。放下的腿有沒有懸空？</div>
+      <div class="eval-item">
+        <div class="eval-label">左腳放下時</div>
+        <div class="eval-scale">
+          <button class="eval-btn" id="hipL-1" onclick="selectMovement('hipL','懸空')">懸空（緊繃）</button>
+          <button class="eval-btn" id="hipL-2" onclick="selectMovement('hipL','貼地')">貼地（正常）</button>
+        </div>
+      </div>
+      <div class="eval-item">
+        <div class="eval-label">右腳放下時</div>
+        <div class="eval-scale">
+          <button class="eval-btn" id="hipR-1" onclick="selectMovement('hipR','懸空')">懸空（緊繃）</button>
+          <button class="eval-btn" id="hipR-2" onclick="selectMovement('hipR','貼地')">貼地（正常）</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">④ 臀肌啟動感受</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">趴著單腿往上抬，感受是臀部先出力，還是下背先出力？</div>
+      <div class="eval-item">
+        <div class="eval-label">臀肌啟動分數（1=完全用下背，10=完全用臀肌）</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <span style="font-size:11px;color:var(--textl);width:20px;">1</span>
+          <input type="range" min="1" max="10" value="5" id="m-glute"
+            style="flex:1;accent-color:var(--teal);"
+            oninput="document.getElementById('m-glute-val').textContent=this.value">
+          <span style="font-size:11px;color:var(--textl);width:20px;text-align:right;">10</span>
+          <span id="m-glute-val" style="font-size:14px;font-weight:600;color:var(--teal);width:24px;text-align:center;">5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">⑤ 深蹲觀察</div>
+      <div style="font-size:12px;color:var(--textm);margin-bottom:.75rem;">手機錄影後回放，觀察自己的深蹲。</div>
+      <div class="eval-item">
+        <div class="eval-label">觀察到什麼？（膝蓋、腳跟、身體前傾等）</div>
+        <textarea id="m-squat" placeholder="例：膝蓋稍微內塌，腳跟沒有抬起，比上次好一點"
+          style="width:100%;margin-top:6px;padding:.6rem .75rem;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;resize:none;min-height:60px;outline:none;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title">整體感受與紀錄</div>
+      <div class="eval-item">
+        <div class="eval-label">整體狀態（1-10分）</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <span style="font-size:11px;color:var(--textl);width:20px;">1</span>
+          <input type="range" min="1" max="10" value="5" id="m-overall"
+            style="flex:1;accent-color:var(--teal);"
+            oninput="document.getElementById('m-overall-val').textContent=this.value">
+          <span style="font-size:11px;color:var(--textl);width:20px;text-align:right;">10</span>
+          <span id="m-overall-val" style="font-size:14px;font-weight:600;color:var(--teal);width:24px;text-align:center;">5</span>
+        </div>
+      </div>
+      <div class="eval-item">
+        <div class="eval-label">這兩週最大的變化或發現</div>
+        <textarea id="m-note" placeholder="例：膝蓋明顯好多了，右肩還是比較緊，單腳站立進步了 5 秒"
+          style="width:100%;margin-top:6px;padding:.6rem .75rem;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;resize:none;min-height:80px;outline:none;"></textarea>
+      </div>
+      <button class="btn btn-p" style="width:100%;margin-top:.25rem;" onclick="saveMovementEval()">儲存動作評估</button>
+      <div class="save-indicator" id="movementSaveIndicator" style="text-align:center;padding:.4rem;font-size:12px;color:var(--teal);opacity:0;transition:opacity .3s;">已儲存並同步 ✓</div>
+    </div>
+  </div>
+
+  <button class="btn" style="width:100%;margin-top:.25rem;" onclick="goPage('checkin')">← 返回打卡</button>
+  <div style="height:1rem;"></div>
 </div>
 
 <!-- MILESTONE PAGE -->
@@ -311,6 +535,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sa
   <button class="nav-btn active" id="nav-train" onclick="goPage('train')"><span class="nav-icon">🏋️</span>訓練</button>
   <button class="nav-btn" id="nav-milestone" onclick="goPage('milestone')"><span class="nav-icon">🎯</span>目標</button>
   <button class="nav-btn" id="nav-checkin" onclick="goPage('checkin')"><span class="nav-icon">📅</span>打卡</button>
+  <button class="nav-btn" id="nav-movement" onclick="goPage('movement')"><span class="nav-icon">📋</span>評估</button>
 </div>
 </div>
 
@@ -459,6 +684,7 @@ const EXERCISES = [
 
 // ===== STORAGE =====
 const STORAGE_KEY='fitness-app-v2';
+const GS_URL='https://script.google.com/macros/s/AKfycbyrBjSfiKVHZIvfr5umvMGmyfzrGGfoLe44YSTeMQZWY5Mawb1V5V90LIB6WrIOnubM/exec';
 function loadData(){try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):defaultData();}catch(e){return defaultData();}}
 function saveData(d){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(d));showSaveIndicator();}catch(e){}}
 function defaultData(){return{checkedDates:[],evalHistory:[],startDate:todayStr(),bestStreak:0};}
@@ -468,9 +694,22 @@ function showSaveIndicator(){const el=document.getElementById('saveIndicator');e
 let appData=loadData();
 let evalState={};
 
-function init(){renderCheckin();renderMilestone();updateTodayDate();renderEx();}
+function init(){renderCheckin();renderMilestone();updateTodayDate();renderEx();checkAssessmentBanner();}
 function updateTodayDate(){const d=new Date();const days=['日','一','二','三','四','五','六'];document.getElementById('todayDate').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${days[d.getDay()]}`;}
-function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.getElementById('nav-'+id).classList.add('active');if(id==='checkin')renderCheckin();if(id==='milestone')renderMilestone();}
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const navBtn=document.getElementById('nav-'+id);
+  if(navBtn)navBtn.classList.add('active');
+  if(id==='checkin'){renderCheckin();checkAssessmentBanner();}
+  if(id==='milestone')renderMilestone();
+  if(id==='movement'){
+    const d=new Date();
+    document.getElementById('movementDate').textContent=
+      `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+  }
+}
 
 // ===== RENDER EXERCISE =====
 function renderEx(){
@@ -690,11 +929,126 @@ function renderCheckin(){
   for(let d=1;d<=dim;d++){const ds=`${now.getFullYear()}-${mp.split('-')[1]}-${String(d).padStart(2,'0')}`;const el=document.createElement('div');const isToday=ds===today;const isDone=checked.includes(ds);const isFuture=d>now.getDate();el.className='m-day'+(isDone?' done':isToday?' today':isFuture?' future':'');el.textContent=d;grid.appendChild(el);}
   const btn=document.getElementById('checkinBtn');if(checked.includes(today)){btn.textContent='✅ 今天已打卡！';btn.classList.add('done-btn');}else{btn.textContent='✅ 今日打卡';btn.classList.remove('done-btn');}
   renderHistory(checked);updateMilestoneFromDays(checked.length);
+  checkMovementReminder();
 }
 function renderHistory(checked){const row=document.getElementById('historyRow');row.innerHTML='';const days=['一','二','三','四','五','六','日'];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;const done=checked.includes(ds);const dow=d.getDay();const label=days[dow===0?6:dow-1];const wrap=document.createElement('div');wrap.className='h-bar-wrap';const bar=document.createElement('div');bar.className='h-bar'+(done?' filled':'');bar.style.height=done?'55px':'5px';const lbl=document.createElement('div');lbl.className='h-lbl';lbl.textContent=label;wrap.append(bar,lbl);row.appendChild(wrap);}}
 function checkInToday(){const today=todayStr();if(appData.checkedDates.includes(today))return;appData.checkedDates.push(today);const streak=calcStreak(appData.checkedDates);appData.bestStreak=Math.max(streak,appData.bestStreak||0);saveData(appData);renderCheckin();updateMilestoneProgress();}
-function selectEval(btn,key,val){evalState[key]=val;btn.parentElement.querySelectorAll('.eval-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
-function saveEval(){const today=todayStr();const entry={date:today,...evalState};appData.evalHistory=(appData.evalHistory||[]).filter(e=>e.date!==today);appData.evalHistory.push(entry);saveData(appData);alert('評估已儲存！');}
+// ===== SLIDER =====
+function updateSlider(el, valId){
+  const v=el.value;
+  document.getElementById(valId).textContent=v;
+  const pct=(v-1)/9*100;
+  el.style.background=`linear-gradient(to right,var(--teal) 0%,var(--teal) ${pct}%,var(--border) ${pct}%,var(--border) 100%)`;
+}
+
+// ===== RADIO =====
+function selectRadio(el, groupId, val){
+  document.querySelectorAll(`#${groupId} .radio-btn`).forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function getRadioVal(groupId){
+  const sel=document.querySelector(`#${groupId} .radio-btn.selected`);
+  return sel?sel.textContent:'未填';
+}
+
+// ===== DAILY EVAL =====
+async function saveEval(){
+  const today=todayStr();
+  const knee=document.getElementById('kneeVal')?.textContent||'5';
+  const shoulder=document.getElementById('shoulderVal')?.textContent||'5';
+  const feel=document.getElementById('feelVal')?.textContent||'5';
+  const note=document.getElementById('dailyNote')?.value||'';
+  const entry={date:today,knee,shoulder,feel,note};
+  appData.evalHistory=(appData.evalHistory||[]).filter(e=>e.date!==today);
+  appData.evalHistory.push(entry);
+  saveData(appData);
+  // Send to Google Sheet
+  try{
+    await fetch(GS_URL,{method:'POST',body:JSON.stringify({
+      type:'daily',date:today,knee,shoulder,feel,note,
+      totalDays:(appData.checkedDates||[]).length
+    })});
+  }catch(e){console.log('GS error',e);}
+  alert('評估已儲存並同步至 Google Sheet！');
+}
+
+// ===== MOVEMENT ASSESSMENT =====
+function checkAssessmentBanner(){
+  const today=new Date();
+  const d=today.getDate();
+  const banner=document.getElementById('assessBanner');
+  if(!banner)return;
+  // Show banner on 1-3 or 15-17 of each month
+  const inWindow=(d>=1&&d<=3)||(d>=15&&d<=17);
+  // Check if already done this period
+  const periodKey=`${today.getFullYear()}-${today.getMonth()+1}-${d<=10?'1':'15'}`;
+  const done=(appData.movementDone||[]).includes(periodKey);
+  banner.style.display=(inWindow&&!done)?'':'none';
+}
+
+async function submitMovement(){
+  const today=todayStr();
+  const balanceL=document.getElementById('balanceL').value||'0';
+  const balanceR=document.getElementById('balanceR').value||'0';
+  const shoulderDist=document.getElementById('shoulderDist').value||'0';
+  const hipL=getRadioVal('hipL');
+  const hipR=getRadioVal('hipR');
+  const gluteScore=document.getElementById('gluteVal')?.textContent||'5';
+  const overall=document.getElementById('overallVal')?.textContent||'5';
+  const squatNote=document.getElementById('squatNote')?.value||'';
+  const note=document.getElementById('movementNote')?.value||'';
+
+  // Compare with last assessment
+  const last=(appData.movementHistory||[]).slice(-1)[0];
+  if(last){
+    const comp=document.getElementById('movementCompare');
+    const compContent=document.getElementById('compareContent');
+    if(comp&&compContent){
+      const rows=[];
+      const diff=(a,b,unit='',higher='better')=>{
+        const d=parseFloat(a)-parseFloat(b);
+        if(isNaN(d))return'';
+        const better=(higher==='better'&&d>0)||(higher==='lower'&&d<0);
+        const icon=d===0?'→':better?'↑':'↓';
+        return `${icon} ${Math.abs(d)}${unit}`;
+      };
+      rows.push(`單腳站立左：${balanceL}秒 ${diff(balanceL,last.balanceL,'秒')}`);
+      rows.push(`單腳站立右：${balanceR}秒 ${diff(balanceR,last.balanceR,'秒')}`);
+      rows.push(`整體感受：${overall}分 ${diff(overall,last.overall,'分')}`);
+      compContent.innerHTML=rows.map(r=>`<div class="compare-row">${r}</div>`).join('');
+      comp.style.display='block';
+    }
+  }
+
+  // Save locally
+  const entry={date:today,balanceL,balanceR,shoulderDist,hipL,hipR,gluteScore,overall,squatNote,note};
+  appData.movementHistory=(appData.movementHistory||[]);
+  appData.movementHistory.push(entry);
+  // Mark period as done
+  const now=new Date();
+  const d=now.getDate();
+  const periodKey=`${now.getFullYear()}-${now.getMonth()+1}-${d<=10?'1':'15'}`;
+  appData.movementDone=(appData.movementDone||[]);
+  if(!appData.movementDone.includes(periodKey)) appData.movementDone.push(periodKey);
+  saveData(appData);
+
+  // Send to Google Sheet
+  const btn=document.querySelector('.submit-btn');
+  if(btn){btn.disabled=true;btn.textContent='送出中...';}
+  try{
+    await fetch(GS_URL,{method:'POST',body:JSON.stringify({
+      type:'movement',date:today,balanceL,balanceR,shoulderDist,
+      hipL,hipR,gluteScore,squatNote,overall,note
+    })});
+    if(btn){btn.textContent='✅ 已儲存並同步';}
+    checkAssessmentBanner();
+    setTimeout(()=>goPage('checkin'),1500);
+  }catch(e){
+    console.log('GS error',e);
+    if(btn){btn.disabled=false;btn.textContent='儲存評估並送出';}
+    alert('本地已儲存，但網路連線失敗，資料下次補送。');
+  }
+}
 
 // ===== MILESTONE =====
 function updateMilestoneFromDays(n){const ms=[{id:'ms0',days:0},{id:'ms1',days:14},{id:'ms2',days:42},{id:'ms3',days:90},{id:'ms4',days:120},{id:'ms5',days:270}];ms.forEach((m,i)=>{const el=document.getElementById(m.id);if(!el)return;if(n>=(ms[i+1]?.days??999)){el.className='tl-dot done-ms';}else if(n>=m.days){el.className='tl-dot current';}else{el.className='tl-dot locked';}});}
